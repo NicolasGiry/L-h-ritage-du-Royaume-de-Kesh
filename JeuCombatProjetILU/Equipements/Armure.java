@@ -1,0 +1,5 @@
+package Equipements;
+
+public enum Armure{
+    TUNIQUE_EN_CUIR, PEAU_DOURS, PLASTRON_DE_SOLDAT, ARMURE_PIQUANTE, ROBE_TENEBREUSE;
+}
