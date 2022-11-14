@@ -1,5 +1,0 @@
-package Equipements;
-
-public enum Casque{
-    CAPUCHE_DE_BRIGANT, CRANE_DOURS, CASQUE_DE_SOLDAT, CASQUE_PIQUANT, CASQUE_TENEBREUX;
-}

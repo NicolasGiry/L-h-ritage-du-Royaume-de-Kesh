@@ -13,17 +13,30 @@ public class Combattant {
     private int defense;
     private Arme arme;
     private Attaques[] attaques = new Attaques[6];
-    private int nbAttaques = 2;
+    private int nbAttaques;
     private boolean isPoisonned;
     private int nbToursPoison = 0;
     private boolean isStunt;
     private int nbToursStunt = 0;
+    private int niveau;
 
-    public Combattant(int defense, Arme arme, Attaques attaque1, Attaques attaque2) {
+    public Combattant(int defense, Arme arme, Attaques attaque1, Attaques attaque2, int niveau) {
         this.defense = defense;
         this.arme = arme;
         this.attaques[0] = attaque1;
         this.attaques[1] = attaque2;
+        nbAttaques = 2;
+        this.niveau = niveau;
+    }
+
+    public Combattant(int defense, Arme arme, Attaques attaque1, Attaques attaque2, Attaques attaque3, int niveau) {
+        this.defense = defense;
+        this.arme = arme;
+        this.attaques[0] = attaque1;
+        this.attaques[1] = attaque2;
+        this.attaques[2] = attaque3;
+        nbAttaques = 3;
+        this.niveau = niveau;
     }
 
     public String getNom(){
@@ -50,6 +63,10 @@ public class Combattant {
         return defense;
     }
 
+    public int getNiveau(){
+        return niveau;
+    }
+
     public boolean getIsPoisonned(){
         return isPoisonned;
     }
@@ -68,6 +85,13 @@ public class Combattant {
 
     public void SetHealth(int health){
         this.currentHealth = health;
+        if (currentHealth>maxHealth){
+            currentHealth = maxHealth;
+        }
+    }
+
+    public void levelUp(){
+        niveau ++;
     }
 
     public void TakeDamage(int damage){
@@ -85,7 +109,7 @@ public class Combattant {
     public void BePoisonned(int degat){
         if (degat>0){
             System.out.println("Le poison draine les pv de "+getNom()+"\n"+nbToursPoison+" tours restants avant que l'effet du poison ne se dissipe");
-            TakeDamage(degat);
+            TakeDamage(degat+1);
         }
         nbToursPoison --;
         isPoisonned = nbToursPoison>0;

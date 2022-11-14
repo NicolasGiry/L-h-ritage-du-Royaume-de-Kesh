@@ -24,7 +24,7 @@ public class Histoire {
 
     public static void Loot(Player joueur, Equipement equipement){
         if (equipement != null){
-            System.out.println("Le monstre laisse tomber un "+equipement.toString());
+            System.out.println("Le monstre laisse tomber un "+equipement+" ( def : "+equipement.getDefense()+" )");
             joueur.recevoirLoot(equipement);
         }
     }
@@ -51,8 +51,14 @@ public class Histoire {
     public static void main(String[] args) {
         Player joueur = intro();
         Ennemy monstre1 = new Ennemy(1, null, Equipement.BOUCLIER_EN_BOIS, "Armeus", 1);
-        Ennemy monstre2 = new Ennemy(10, null, null, "Tyron", 50);
+        Ennemy monstre2 = new Ennemy(1, null, Equipement.BOUCLIER_EN_METAL, "Tyron", 1);
+        Ennemy monstre3 = new Ennemy(5, null, Equipement.CRANE_DOURS, "Anours", 5);
         combat(joueur, monstre1);
         combat(joueur, monstre2);
+        combat(joueur, monstre3);
+        System.out.println("Inventaire :");
+        joueur.afficherInventaire();
+        System.out.println("Equipements :");
+        joueur.afficherEquipements();
     }
 }

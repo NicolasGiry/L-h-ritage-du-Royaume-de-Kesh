@@ -10,7 +10,8 @@ public enum Attaques {
     BOULE_DE_GLACE("boule de glace", "vous lancez une boule de glace par magie, très efficace contre les monstres feu", Type.MAGIQUE), 
     ECLAIR("éclair", "vous lancez un éclair par magie, très efficace contre les monstres glace", Type.MAGIQUE), 
     RACINE("souffle", "des racines aparraissent du sol et enlassent l'adversaire, l'ennemi peut être bloqué pendant un tour", Type.MAGIQUE), 
-    ATTAQUE_TENEBREUSE("attaque ténébreuse", "une aura maléfique née de votre colère se déverse sur l'ennemi, qui sait ce qu'il lui arrivera...", Type.MAGIQUE);
+    ATTAQUE_TENEBREUSE("attaque ténébreuse", "une aura maléfique née de votre colère se déverse sur l'ennemi, qui sait ce qu'il lui arrivera...", Type.MAGIQUE),
+    SOIN("soin", "vous utilisez 5 mana pour guérir vous blessures ( guéri 25 PV )", Type.MAGIQUE);
 
     private String nom;
     private String description;

@@ -25,6 +25,11 @@ public enum Equipement{
         this.defense = defense;
     }
 
+    @Override
+    public String toString(){
+        return nom;
+    }
+
     public String getEquip(){
         return equip;
     }

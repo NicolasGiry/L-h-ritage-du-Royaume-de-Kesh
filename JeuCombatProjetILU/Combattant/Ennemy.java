@@ -11,12 +11,10 @@ import java.util.Scanner;
 public class Ennemy extends Combattant{
     private Equipement tresor;
     private Type type;
-    private int niveau;
 
     public Ennemy(int defense, Arme arme, Equipement equipement, String nom, int niveau){
-        super(defense, arme, Attaques.MORSURE, Attaques.GRIFFE);
+        super(defense, arme, Attaques.MORSURE, Attaques.GRIFFE, niveau);
         this.tresor = equipement;
-        this.niveau = niveau;
         super.SetNom(nom);
     }
 
@@ -29,7 +27,7 @@ public class Ennemy extends Combattant{
         Random random = new Random();
         String trash;
         int choixAttaque = random.nextInt(2);
-        int att = niveau + random.nextInt(5);
+        int att = ((getNiveau()/2)+1) * (random.nextInt(5)+1);
         if (joueur.getIsPoisonned()){
             joueur.BePoisonned(att/3);
         }
