@@ -5,6 +5,7 @@ import java.util.Scanner;
 import Aptitudes.Attaques;
 import Aptitudes.Type;
 import Bonus.Loot;
+import Bonus.Potions;
 import Equipements.Arme;
 import Equipements.Equipement;
 import java.util.Random;
@@ -16,14 +17,20 @@ public class Player extends Combattant{
     public int mana = 50;
     private Equipement[] tresors = new Equipement[10];
     private int nbLoot = 0;
+    private Potions[] stockPotions = new Potions[5];
     private int pieces = 10;
     private int exp = 0;
+    private int nbPotions = 0;
     
     public Player() {
         super(0,Arme.EPEE_EN_BOIS, 3, attaquesJoueur, 1);
         
         
         //equipement[0] = Equipement.CAPUCHE_DE_BRIGANT; equipement[1] = Equipement.TUNIQUE_EN_CUIR;
+    }
+
+    public int getPieces(){
+        return pieces;
     }
 
     public void ChoisirNom(){
@@ -210,6 +217,24 @@ public class Player extends Combattant{
         }
     }
 
+    public void recevoirPotion(Potions potion){
+        Scanner input = new Scanner(System.in);
+
+        if (nbPotions < 5){
+            stockPotions[nbPotions] = potion;
+            nbPotions++;
+        } else{
+            System.out.println("Vous n'avez plus de places ! Voulez vous abandonner cette potion ou en jeter une autre [1/2]");
+            int choix = input.nextInt();
+            if (choix == 2){
+                afficherPotions();
+                System.out.println("Quelle potion voulez vous jeter ? [1/2/3/4/5]");
+                choix = input.nextInt();
+                stockPotions[choix-1] = potion;
+            }
+        }
+    }
+
     public void equiperArme(Arme arme){
         Scanner input = new Scanner(System.in);
         String equip;
@@ -294,6 +319,12 @@ public class Player extends Combattant{
         }System.out.println("["+getArme()+"]");
     }
 
+    public void afficherPotions(){
+        for (int i=0; i<nbPotions; i++){
+            System.out.print("["+stockPotions[i]+"] ");
+        }System.out.println();
+    }
+
     public void gagnerPieces(int pieces){
         Scanner input = new Scanner(System.in);
         String trash;
@@ -301,7 +332,10 @@ public class Player extends Combattant{
         System.out.println("Vous gagnez "+pieces+" pieces");
         System.out.println("Vous avez "+this.pieces+" pieces");
         trash = input.nextLine();
+    }
 
+    public void perdrePieces(int pieces){
+        this.pieces -= pieces;
     }
 
     public void gagnerXP(int exp){

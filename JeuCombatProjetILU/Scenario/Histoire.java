@@ -9,6 +9,8 @@ import java.util.Scanner;
 
 import Aptitudes.Attaques;
 import Bonus.Loot;
+import Bonus.Marchand;
+import Bonus.Potions;
 
 public class Histoire {
 
@@ -54,11 +56,14 @@ public class Histoire {
         Ennemy monstre1 = new Ennemy(1, null, coffre1, "Armeus", 1);
         Ennemy monstre2 = new Ennemy(1, null, coffre2, "Tyron", 1);
         Ennemy monstre3 = new Ennemy(5, null, coffre3, "Anours", 5);
+        Marchand marchand = new Marchand(Equipement.PLASTRON_DE_SOLDAT, Arme.EPEE_EMPOISONNEE, Potions.VIE);
+
+        marchand.rencontrerMarchand(joueur);
         
         combat(joueur, monstre1);
         combat(joueur, monstre2);
         combat(joueur, monstre3);
-        coffre.ouvrirCoffre(joueur);
-
+        
+        marchand.rencontrerMarchand(joueur);
     }
 }
