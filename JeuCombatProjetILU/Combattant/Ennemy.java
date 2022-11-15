@@ -9,16 +9,17 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Ennemy extends Combattant{
-    private Equipement tresor;
+    private static Attaques[] attaquesEnnemy = {Attaques.GRIFFE, Attaques.MORSURE};
+    private Loot tresor;
     private Type type;
 
-    public Ennemy(int defense, Arme arme, Equipement equipement, String nom, int niveau){
-        super(defense, arme, Attaques.MORSURE, Attaques.GRIFFE, niveau);
-        this.tresor = equipement;
+    public Ennemy(int defense, Arme arme, Loot loot, String nom, int niveau){
+        super(defense, arme, 2, attaquesEnnemy, niveau);
+        this.tresor = loot;
         super.SetNom(nom);
     }
 
-    public Equipement getTresor(){
+    public Loot getTresor(){
         return tresor;
     }
     

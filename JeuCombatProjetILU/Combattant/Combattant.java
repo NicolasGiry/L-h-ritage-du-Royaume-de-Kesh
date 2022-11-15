@@ -12,7 +12,7 @@ public class Combattant {
     private int currentHealth = maxHealth;
     private int defense;
     private Arme arme;
-    private Attaques[] attaques = new Attaques[6];
+    private Attaques[] attaques;
     private int nbAttaques;
     private boolean isPoisonned;
     private int nbToursPoison = 0;
@@ -20,22 +20,11 @@ public class Combattant {
     private int nbToursStunt = 0;
     private int niveau;
 
-    public Combattant(int defense, Arme arme, Attaques attaque1, Attaques attaque2, int niveau) {
+    public Combattant(int defense, Arme arme, int nbAttaques, Attaques[] attaques, int niveau) {
         this.defense = defense;
         this.arme = arme;
-        this.attaques[0] = attaque1;
-        this.attaques[1] = attaque2;
-        nbAttaques = 2;
-        this.niveau = niveau;
-    }
-
-    public Combattant(int defense, Arme arme, Attaques attaque1, Attaques attaque2, Attaques attaque3, int niveau) {
-        this.defense = defense;
-        this.arme = arme;
-        this.attaques[0] = attaque1;
-        this.attaques[1] = attaque2;
-        this.attaques[2] = attaque3;
-        nbAttaques = 3;
+        this.nbAttaques = nbAttaques;
+        this.attaques = attaques;
         this.niveau = niveau;
     }
 
@@ -90,8 +79,14 @@ public class Combattant {
         }
     }
 
+    public void setArme(Arme arme){
+        this.arme = arme;
+        System.out.println("Vous équipez "+arme);
+    }
+
     public void levelUp(){
         niveau ++;
+        System.out.println("Vous gagnez un niveau ! Vous etes au niveau "+niveau+" !");
     }
 
     public void TakeDamage(int damage){

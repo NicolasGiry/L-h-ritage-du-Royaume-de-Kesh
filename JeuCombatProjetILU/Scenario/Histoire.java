@@ -22,11 +22,8 @@ public class Histoire {
         System.out.println("GAMEOVER ! Vous n'avez plus aucun PV !");
     }
 
-    public static void Loot(Player joueur, Equipement equipement){
-        if (equipement != null){
-            System.out.println("Le monstre laisse tomber un "+equipement+" ( def : "+equipement.getDefense()+" )");
-            joueur.recevoirLoot(equipement);
-        }
+    public static void Loot(Player joueur, Ennemy monstre){
+        monstre.getTresor().ouvrirCoffre(joueur);
     }
 
     public static void combat(Player joueur, Ennemy monstre){
@@ -44,21 +41,24 @@ public class Histoire {
         } if (joueur.getHealth() <= 0){
             GameOver();
         }else if (monstre.getHealth() <=0){
-            Loot(joueur, monstre.getTresor());
+            Loot(joueur, monstre);
         }
     }
 
     public static void main(String[] args) {
         Player joueur = intro();
-        Ennemy monstre1 = new Ennemy(1, null, Equipement.BOUCLIER_EN_BOIS, "Armeus", 1);
-        Ennemy monstre2 = new Ennemy(1, null, Equipement.BOUCLIER_EN_METAL, "Tyron", 1);
-        Ennemy monstre3 = new Ennemy(5, null, Equipement.CRANE_DOURS, "Anours", 5);
+        Loot coffre1 = new Loot(5, Equipement.BOUCLIER_EN_BOIS, 15);
+        Loot coffre2 = new Loot(5, Equipement.BOUCLIER_EN_METAL, 17);
+        Loot coffre3 = new Loot(15, Equipement.CRANE_DOURS, 36);
+        Loot coffre = new Loot(25, Arme.HACHE, 0);
+        Ennemy monstre1 = new Ennemy(1, null, coffre1, "Armeus", 1);
+        Ennemy monstre2 = new Ennemy(1, null, coffre2, "Tyron", 1);
+        Ennemy monstre3 = new Ennemy(5, null, coffre3, "Anours", 5);
+        
         combat(joueur, monstre1);
         combat(joueur, monstre2);
         combat(joueur, monstre3);
-        System.out.println("Inventaire :");
-        joueur.afficherInventaire();
-        System.out.println("Equipements :");
-        joueur.afficherEquipements();
+        coffre.ouvrirCoffre(joueur);
+
     }
 }
