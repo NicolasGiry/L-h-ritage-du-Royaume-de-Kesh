@@ -8,24 +8,26 @@ import Aptitudes.Attaques;
 
 public class Combattant {
     private String nom;
-    private int maxHealth = 100;
-    private int currentHealth = maxHealth;
-    private int defense;
+    protected int maxHealth;
+    private int currentHealth;
+    protected int defense;
     private Arme arme;
     private Attaques[] attaques;
     private int nbAttaques;
-    private boolean isPoisonned;
+    protected boolean isPoisonned;
     private int nbToursPoison = 0;
     private boolean isStunt;
     private int nbToursStunt = 0;
-    private int niveau;
+    protected int niveau;
 
-    public Combattant(int defense, Arme arme, int nbAttaques, Attaques[] attaques, int niveau) {
+    public Combattant(int defense, Arme arme, int nbAttaques, Attaques[] attaques, int niveau, int maxHealth) {
         this.defense = defense;
         this.arme = arme;
         this.nbAttaques = nbAttaques;
         this.attaques = attaques;
         this.niveau = niveau;
+        this.maxHealth = maxHealth;
+        currentHealth = maxHealth;
     }
 
     public String getNom(){
@@ -48,13 +50,13 @@ public class Combattant {
         return currentHealth;
     }
 
-    public int getDefense(){
-        return defense;
-    }
+    // public int getDefense(){
+    //     return defense;
+    // }
 
-    public int getNiveau(){
-        return niveau;
-    }
+    // public int getNiveau(){
+    //     return niveau;
+    // }
 
     public boolean getIsPoisonned(){
         return isPoisonned;
@@ -68,9 +70,9 @@ public class Combattant {
         this.nom = nom;
     }
 
-    public void setDefense(int defense){
-        this.defense = defense;
-    }
+    // public void setDefense(int defense){
+    //     this.defense = defense;
+    // }
 
     public void SetHealth(int health){
         this.currentHealth = health;
@@ -82,11 +84,6 @@ public class Combattant {
     public void setArme(Arme arme){
         this.arme = arme;
         System.out.println("Vous équipez "+arme);
-    }
-
-    public void levelUp(){
-        niveau ++;
-        System.out.println("Vous gagnez un niveau ! Vous etes au niveau "+niveau+" !");
     }
 
     public void TakeDamage(int damage){

@@ -34,11 +34,11 @@ public class Loot{
         trash = input.nextLine();
         joueur.gagnerPieces(pieces);
         if (equipement != null){
-            System.out.println("Il y a un.e "+equipement);
+            System.out.println("Il y a un.e "+equipement+ " a l'interieur !");
             joueur.recevoirEquipement(equipement);
         }
         if (arme != null){
-            System.out.println("Il y a un.e "+arme);
+            System.out.println("Il y a un.e "+arme+ " a l'interieur !");
             joueur.recevoirArme(arme);
         }
     }

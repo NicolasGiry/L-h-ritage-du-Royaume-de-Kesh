@@ -1,5 +1,12 @@
 package Aptitudes;
 
+import java.util.Random;
+import java.util.Scanner;
+
+import Combattant.Ennemy;
+import Combattant.Player;
+import Equipements.Arme;
+
 public enum Attaques {
     LANCE_DARME("lancé d'arme", "lance l'arme du joueur en direction de l'ennemie. Cette action a une possibilité d'échouer mais vous pouvez aussi viser dans le mille et doubler votre attaque", Type.NORMAL), 
     POINTE("pointe", "attaque simple réussissant à coup sur", Type.NORMAL), 
@@ -16,6 +23,9 @@ public enum Attaques {
     private String nom;
     private String description;
     private Type type;
+    private Random random = new Random();
+    private Scanner input = new Scanner(System.in);
+    private String trash;
 
     private Attaques(String nom, String description, Type type){
         this.nom = nom;
@@ -34,5 +44,72 @@ public enum Attaques {
 
     public String getDescription(){
         return description;
+    }
+
+    public void effetArme(Arme arme, Ennemy ennemy, int att){
+        switch (arme.getType()){
+            case POISON:
+                if (ennemy.getIsPoisonned()){
+                    ennemy.BePoisonned(att/3);
+                }else {
+                    //int poison = random.nextInt(3);
+                    int poison = 0;
+                    if (poison == 0){
+                        ennemy.setNbToursPoison(5);
+                        ennemy.BePoisonned(0);
+                        System.out.println("l'épée a empoisonné"+ennemy.getNom()+" !");
+                        trash = input.nextLine();
+                    }
+                }
+                break;
+            case RAPIDE:
+                break;
+            case LOURD:
+                break;
+            case MAGIQUE:
+                break;
+        }
+    }
+
+    public int lanceDarme(int att){
+        int coeff = random.nextInt(5);
+        if (coeff == 0){
+            System.out.println("Cible ratée...");
+            att = 0;
+        }else  if (coeff==1){
+            System.out.println("En plein dans le mille !");
+            att *= 2;
+        }
+        return att;
+    }
+
+    public int soin(int att, Player joueur){
+        joueur.mana -=5;
+        joueur.SetHealth(joueur.getHealth()+25);
+        System.out.println("Vous gagnez 25 PV !");
+        System.out.println("Vous avez "+joueur.getHealth()+" PV");
+        System.out.println("Il vous reste "+joueur.mana+" mana");
+        trash = input.nextLine();
+        return 0;
+    }
+
+    public int morsure(int att, Player joueur){
+        int poison = random.nextInt(5);
+        if (poison == 0){
+            joueur.setNbToursPoison(5);
+            joueur.BePoisonned(0);
+            System.out.println("Cette attaque vous a empoisonné !");
+            trash = input.nextLine();
+        }
+        return att;
+    }
+    
+    public int griffe(int att){
+        int doubleAtt = random.nextInt(5);
+        if (doubleAtt == 0){
+            att *= 2;
+            System.out.println("Pris par la vitesse il attaque deux fois !");
+        }
+        return att;
     }
 }

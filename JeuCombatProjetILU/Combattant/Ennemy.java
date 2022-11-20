@@ -12,9 +12,12 @@ public class Ennemy extends Combattant{
     private static Attaques[] attaquesEnnemy = {Attaques.GRIFFE, Attaques.MORSURE};
     private Loot tresor;
     private Type type;
+    private Scanner input = new Scanner(System.in);
+    private Random random = new Random();
+    private String trash;
 
     public Ennemy(int defense, Arme arme, Loot loot, String nom, int niveau){
-        super(defense, arme, 2, attaquesEnnemy, niveau);
+        super(defense, arme, 2, attaquesEnnemy, niveau, 30 + (niveau*2)%70);
         this.tresor = loot;
         super.SetNom(nom);
     }
@@ -24,12 +27,10 @@ public class Ennemy extends Combattant{
     }
     
     public int AttaqueMonstre(Player joueur){
-        Scanner input = new Scanner(System.in);
-        Random random = new Random();
-        String trash;
+        
         int choixAttaque = random.nextInt(2);
-        int att = ((getNiveau()/2)+1) * (random.nextInt(5)+1);
-        if (joueur.getIsPoisonned()){
+        int att = ((niveau/2)+1) * (random.nextInt(5)+1);
+        if (joueur.isPoisonned){
             joueur.BePoisonned(att/3);
         }
         Attaques attaque = super.getAttaques()[choixAttaque];
@@ -38,23 +39,13 @@ public class Ennemy extends Combattant{
 
         switch (attaque){
             case MORSURE:
-                int poison = random.nextInt(5);
-                if (poison == 0){
-                    joueur.setNbToursPoison(5);
-                    joueur.BePoisonned(0);
-                    System.out.println("Cette attaque vous a empoisonné !");
-                    trash = input.nextLine();
-                }
+                att = attaque.morsure(att, joueur);
                 break;
             case GRIFFE:
-                int doubleAtt = random.nextInt(5);
-                if (doubleAtt == 0){
-                    att *= 2;
-                    System.out.println("Pris par la vitesse il attaque deux fois !");
-                }
+                att = attaque.griffe(att);
                 break;
         }
-        att -= joueur.getDefense()/5;
+        att -= joueur.defense/5;
         if (att<0){
             att = 0;
         }

@@ -24,19 +24,17 @@ public class Marchand{
         System.out.println("Bonjour voyageur ! n'hésitez pas à regarder !");
         afficherMarchandise();
         System.out.println("Que voulez-vous acheter ? [1/2/3] ( 0 pour partir )");
+        System.out.println("Votre argent : "+joueur.getPieces()+" ₽");
         choix = input.nextInt();
         while (choix<0 || choix>3){
             System.out.println("Erreur ! Que voulez-vous acheter ? [1/2/3] ( 0 pour partir )");
             choix = input.nextInt();
         }
         if (choix==1){
-            
             prix = equipement.getPrix();
         }if (choix==2){
-            
            prix = arme.getPrix();
         }if (choix==3){
-            
             prix = potion.getPrix();
         }
         if (prix>joueur.getPieces()){

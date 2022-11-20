@@ -21,12 +21,13 @@ public class Player extends Combattant{
     private int pieces = 10;
     private int exp = 0;
     private int nbPotions = 0;
+
+    private Scanner input = new Scanner(System.in);
+    private Random random = new Random();
+    private String trash;
     
     public Player() {
-        super(0,Arme.EPEE_EN_BOIS, 3, attaquesJoueur, 1);
-        
-        
-        //equipement[0] = Equipement.CAPUCHE_DE_BRIGANT; equipement[1] = Equipement.TUNIQUE_EN_CUIR;
+        super(0,Arme.EPEE_EN_BOIS, 3, attaquesJoueur, 1, 100);
     }
 
     public int getPieces(){
@@ -34,8 +35,6 @@ public class Player extends Combattant{
     }
 
     public void ChoisirNom(){
-        Scanner input = new Scanner(System.in); 
-        String trash;
         System.out.println("Bonjour ! Je suis desolee, vous venez de vous reveiller mais le temps presse !");
         trash = input.nextLine();
         System.out.println("Le Royaume de Kesh a ete pris d'assault par des monstres ! Le chateau est en ruine !");
@@ -51,7 +50,7 @@ public class Player extends Combattant{
         super.SetNom(nom);
     }
 
-    public boolean ChoixAction(){
+    public boolean ChoixCombat(){
         Scanner input = new Scanner(System.in);
         int choix;
 
@@ -68,29 +67,24 @@ public class Player extends Combattant{
             case 1:
                 return true;
             case 2:
-                infos();
-                ChoixAction();
+                infosCombat();
+                ChoixCombat();
                 return true;
             case 3:
-                return !fuir();
+                return !fuirCombat();
             default:
                 return true;
             }
     }
 
-    public void infos(){
-        Scanner input = new Scanner(System.in);
-        String trash;
+    private void infosCombat(){
         for (int i=0; i<getNbAttaques(); i++){
             System.out.println(getAttaques()[i]+" : "+getAttaques()[i].getDescription());
         }
         trash = input.nextLine();
     }
 
-    public boolean fuir(){
-        Scanner input = new Scanner(System.in);
-        String trash;
-        Random random = new Random();
+    private boolean fuirCombat(){
         int fuite = random.nextInt(10);
         if (fuite==0){
             System.out.println("Vous avez réussi à fuir");
@@ -104,7 +98,6 @@ public class Player extends Combattant{
     }
 
     public Attaques choisirAttaque(){
-        Scanner input = new Scanner(System.in); 
         String choix = "1";
         Attaques[] attaques = super.getAttaques();
         int nbAttaques = super.getNbAttaques();
@@ -126,35 +119,18 @@ public class Player extends Combattant{
     }
 
     public int AttaqueJoueur(Attaques attaque, Ennemy ennemy){
-        Scanner input = new Scanner(System.in);
-        Random random = new Random();
         Arme arme = super.getArme();
+        int att = (arme.getAtt() + random.nextInt(5)+2)*(niveau);
 
-        int att = (arme.getAtt() + random.nextInt(5)+2)*(getNiveau());
-        String trash;
+        attaque.effetArme(arme, ennemy, att);
 
         switch (attaque){
             case LANCE_DARME:
-                int coeff = random.nextInt(5);
-                if (coeff == 0){
-                    System.out.println("Cible ratée...");
-                    att = 0;
-                }else  if (coeff==1){
-                    System.out.println("En plein dans le mille !");
-                    att *= 2;
-                }
-                break;
+                att = attaque.lanceDarme(att);
             case POINTE:
-                att=50000000;
                 break;
             case SOIN:
-                mana -=5;
-                SetHealth(getHealth()+25);
-                System.out.println("Vous gagnez 25 PV !");
-                System.out.println("Vous avez "+getHealth()+" PV");
-                System.out.println("Il vous reste "+mana+" mana");
-                trash = input.nextLine();
-                return 0;
+                return attaque.soin(att, this);
             case BOULE_DE_FEU:
                 mana -= 5;
                 break;
@@ -176,7 +152,7 @@ public class Player extends Combattant{
                 att *= random.nextInt(4)+1;
                 break;
         }
-        att -= ennemy.getDefense()/5;
+        att -= ennemy.defense/5;
         if (att<0){
             att = 0;
         }
@@ -186,7 +162,6 @@ public class Player extends Combattant{
     }
 
     public void recevoirEquipement(Equipement equipement){
-        Scanner input = new Scanner(System.in);
         String equip;
 
         tresors[nbLoot] = equipement;
@@ -203,7 +178,6 @@ public class Player extends Combattant{
     }
 
     public void recevoirArme(Arme arme){
-        Scanner input = new Scanner(System.in);
         String equip;
 
         System.out.println("Voulez vous équiper "+arme+" ( att : "+arme.getAtt()+" ) ? [o/n]");
@@ -218,7 +192,6 @@ public class Player extends Combattant{
     }
 
     public void recevoirPotion(Potions potion){
-        Scanner input = new Scanner(System.in);
 
         if (nbPotions < 5){
             stockPotions[nbPotions] = potion;
@@ -236,7 +209,6 @@ public class Player extends Combattant{
     }
 
     public void equiperArme(Arme arme){
-        Scanner input = new Scanner(System.in);
         String equip;
 
         if (getArme() == null){
@@ -257,7 +229,6 @@ public class Player extends Combattant{
     }
 
     public void equiperEquipement(Equipement equipement){
-        Scanner input = new Scanner(System.in);
         int indice = 0;
         switch (equipement.getEquip()){
             case "casque":
@@ -294,13 +265,13 @@ public class Player extends Combattant{
                 this.equipement[indice] = temp;
             }
         }
-        setDefense(0);
+        defense = 0;
         for (int i=0; i<3; i++){
             if (this.equipement[i] != null){
-                setDefense(getDefense() + this.equipement[i].getDefense());
+               defense +=this.equipement[i].getDefense();
             }
         }
-        System.out.println("Vous équipez "+equipement.toString()+"\nVotre defense passe à "+getDefense());
+        System.out.println("Vous équipez "+equipement.toString()+"\nVotre defense passe à "+defense);
         String trash = input.nextLine();
     }
 
@@ -326,8 +297,6 @@ public class Player extends Combattant{
     }
 
     public void gagnerPieces(int pieces){
-        Scanner input = new Scanner(System.in);
-        String trash;
         this.pieces += pieces;
         System.out.println("Vous gagnez "+pieces+" pieces");
         System.out.println("Vous avez "+this.pieces+" pieces");
@@ -336,6 +305,8 @@ public class Player extends Combattant{
 
     public void perdrePieces(int pieces){
         this.pieces -= pieces;
+        System.out.println("-"+pieces+" ₽");
+        trash = input.nextLine();
     }
 
     public void gagnerXP(int exp){
@@ -343,4 +314,8 @@ public class Player extends Combattant{
         System.out.println("Vous gagner "+exp+" de points d'experience !");
     }
 
+    public void levelUp(){
+        niveau ++;
+        System.out.println("Vous gagnez un niveau ! Vous etes au niveau "+niveau+" !");
+    }
 }

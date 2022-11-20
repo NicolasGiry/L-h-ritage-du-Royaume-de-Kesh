@@ -34,7 +34,7 @@ public class Histoire {
 
         System.out.println("Vous croisez le chemin de "+monstre.getNom()+" !");
         trash = input.nextLine();
-        while (joueur.getHealth()>0 && monstre.getHealth()>0 && joueur.ChoixAction()){
+        while (joueur.getHealth()>0 && monstre.getHealth()>0 && joueur.ChoixCombat()){
             Attaques attaque = joueur.choisirAttaque();
             monstre.TakeDamage(joueur.AttaqueJoueur(attaque, monstre));
             if (monstre.getHealth()>0){
@@ -55,15 +55,16 @@ public class Histoire {
         Loot coffre = new Loot(25, Arme.HACHE, 0);
         Ennemy monstre1 = new Ennemy(1, null, coffre1, "Armeus", 1);
         Ennemy monstre2 = new Ennemy(1, null, coffre2, "Tyron", 1);
-        Ennemy monstre3 = new Ennemy(5, null, coffre3, "Anours", 5);
+        Ennemy monstre3 = new Ennemy(1, null, coffre3, "Anours", 5);
         Marchand marchand = new Marchand(Equipement.PLASTRON_DE_SOLDAT, Arme.EPEE_EMPOISONNEE, Potions.VIE);
 
-        marchand.rencontrerMarchand(joueur);
-        
         combat(joueur, monstre1);
         combat(joueur, monstre2);
+
+        marchand.rencontrerMarchand(joueur);
+
         combat(joueur, monstre3);
         
-        marchand.rencontrerMarchand(joueur);
+        
     }
 }
