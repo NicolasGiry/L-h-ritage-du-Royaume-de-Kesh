@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 import Combattant.Ennemy;
 import Combattant.Player;
-import Equipements.Arme;
+import Objet.Arme;
+import Objet.Objet;
 
 public enum Attaques {
     LANCE_DARME("lancé d'arme", "lance l'arme du joueur en direction de l'ennemie. Cette action a une possibilité d'échouer mais vous pouvez aussi viser dans le mille et doubler votre attaque", Type.NORMAL), 
@@ -46,18 +47,17 @@ public enum Attaques {
         return description;
     }
 
-    public void effetArme(Arme arme, Ennemy ennemy, int att){
+    public void effetArme(Objet arme, Ennemy ennemy, int att){
         switch (arme.getType()){
             case POISON:
                 if (ennemy.getIsPoisonned()){
                     ennemy.BePoisonned(att/3);
                 }else {
-                    //int poison = random.nextInt(3);
-                    int poison = 0;
+                    int poison = random.nextInt(3);
                     if (poison == 0){
                         ennemy.setNbToursPoison(5);
                         ennemy.BePoisonned(0);
-                        System.out.println("l'épée a empoisonné"+ennemy.getNom()+" !");
+                        System.out.println("l'épée a empoisonné "+ennemy.getNom()+" !");
                         trash = input.nextLine();
                     }
                 }

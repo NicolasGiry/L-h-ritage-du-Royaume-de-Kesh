@@ -1,8 +1,8 @@
 package Scenario;
 
 import Combattant.Player;
-import Equipements.Arme;
-import Equipements.Equipement;
+import Objet.Arme;
+import Objet.Equipement;
 import Combattant.Ennemy;
 
 import java.util.Scanner;
@@ -10,7 +10,7 @@ import java.util.Scanner;
 import Aptitudes.Attaques;
 import Bonus.Loot;
 import Bonus.Marchand;
-import Bonus.Potions;
+import Objet.Potions;
 
 public class Histoire {
 
@@ -35,8 +35,10 @@ public class Histoire {
         System.out.println("Vous croisez le chemin de "+monstre.getNom()+" !");
         trash = input.nextLine();
         while (joueur.getHealth()>0 && monstre.getHealth()>0 && joueur.ChoixCombat()){
-            Attaques attaque = joueur.choisirAttaque();
-            monstre.TakeDamage(joueur.AttaqueJoueur(attaque, monstre));
+            if (!joueur.getFuiteRatee()){
+                Attaques attaque = joueur.choisirAttaque();
+                monstre.TakeDamage(joueur.AttaqueJoueur(attaque, monstre));
+            }
             if (monstre.getHealth()>0){
                 joueur.TakeDamage(monstre.AttaqueMonstre(joueur));
             }

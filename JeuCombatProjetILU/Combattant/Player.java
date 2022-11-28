@@ -5,22 +5,25 @@ import java.util.Scanner;
 import Aptitudes.Attaques;
 import Aptitudes.Type;
 import Bonus.Loot;
-import Bonus.Potions;
-import Equipements.Arme;
-import Equipements.Equipement;
+import Objet.Potions;
+import Objet.Arme;
+import Objet.Equipement;
 import java.util.Random;
 import Combattant.Ennemy;
+import Objet.Objet;
 
 public class Player extends Combattant{
     private static Attaques[] attaquesJoueur= {Attaques.POINTE, Attaques.LANCE_DARME, Attaques.SOIN};
-    private Equipement[] equipement = new Equipement[3];
+    private Objet[] inventaire = new Objet[15];
+    private Objet[] equipement = new Equipement[3];
     public int mana = 50;
-    private Equipement[] tresors = new Equipement[10];
+    //private Equipement[] tresors = new Equipement[10];
     private int nbLoot = 0;
     private Potions[] stockPotions = new Potions[5];
     private int pieces = 10;
     private int exp = 0;
     private int nbPotions = 0;
+    private boolean fuiteRatee;
 
     private Scanner input = new Scanner(System.in);
     private Random random = new Random();
@@ -28,10 +31,21 @@ public class Player extends Combattant{
     
     public Player() {
         super(0,Arme.EPEE_EN_BOIS, 3, attaquesJoueur, 1, 100);
+        for (int i=0; i<15; i++){
+            inventaire[i] = null;
+        }
     }
 
     public int getPieces(){
         return pieces;
+    }
+
+    public boolean getFuiteRatee(){
+        if (fuiteRatee){
+            fuiteRatee = false;
+            return true;
+        }
+        return fuiteRatee;
     }
 
     public void ChoisirNom(){
@@ -62,7 +76,6 @@ public class Player extends Combattant{
             System.out.println("1) COMBAT  2) INFOS  3) FUIR");
             choix = input.nextInt();
         }
-
         switch (choix){
             case 1:
                 return true;
@@ -71,7 +84,8 @@ public class Player extends Combattant{
                 ChoixCombat();
                 return true;
             case 3:
-                return !fuirCombat();
+                fuiteRatee = !fuirCombat();
+                return fuiteRatee;
             default:
                 return true;
             }
@@ -119,11 +133,9 @@ public class Player extends Combattant{
     }
 
     public int AttaqueJoueur(Attaques attaque, Ennemy ennemy){
-        Arme arme = super.getArme();
-        int att = (arme.getAtt() + random.nextInt(5)+2)*(niveau);
-
+        Objet arme = super.getArme();
+        int att = (arme.getAtt() + random.nextInt(5)+2)*(niveau/2==0?1:niveau/2);
         attaque.effetArme(arme, ennemy, att);
-
         switch (attaque){
             case LANCE_DARME:
                 att = attaque.lanceDarme(att);
@@ -161,56 +173,35 @@ public class Player extends Combattant{
         return att;
     }
 
-    public void recevoirEquipement(Equipement equipement){
+    public void recevoirObjet(Objet objet){
         String equip;
-
-        tresors[nbLoot] = equipement;
-        nbLoot++;
-        System.out.println("Voulez vous équiper "+equipement+" ( def :"+equipement.getDefense()+" ) ? [o/n]");
+        
+        System.out.println("Voulez vous équiper "+objet+" ? [o/n]");
         equip = input.nextLine();
         while (!(equip.equals("o")) && !(equip.equals("n"))){
-            System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
-            equip = input.nextLine();
-        }
+                     System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
+                     equip = input.nextLine();
+                 }
         if (equip.equals("o")){
-            equiperEquipement(equipement);
+            equiperObjet(objet);
         }
+        afficherInventaire();
     }
 
-    public void recevoirArme(Arme arme){
-        String equip;
-
-        System.out.println("Voulez vous équiper "+arme+" ( att : "+arme.getAtt()+" ) ? [o/n]");
-        equip = input.nextLine();
-        while (!(equip.equals("o")) && !(equip.equals("n"))){
-            System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
-            equip = input.nextLine();
-        }
-        if (equip.equals("o")){
-            equiperArme(arme);
-        }
-    }
-
-    public void recevoirPotion(Potions potion){
-
-        if (nbPotions < 5){
-            stockPotions[nbPotions] = potion;
-            nbPotions++;
-        } else{
-            System.out.println("Vous n'avez plus de places ! Voulez vous abandonner cette potion ou en jeter une autre [1/2]");
-            int choix = input.nextInt();
-            if (choix == 2){
-                afficherPotions();
-                System.out.println("Quelle potion voulez vous jeter ? [1/2/3/4/5]");
-                choix = input.nextInt();
-                stockPotions[choix-1] = potion;
+    private void equiperObjet(Objet objet){
+        if (objet instanceof Arme){
+            equiperArme(objet);
+        } else {
+            inventaire[nbLoot] = objet;
+            nbLoot++;
+            if (objet instanceof Equipement){
+                equiperEquipement(objet);
             }
         }
     }
 
-    public void equiperArme(Arme arme){
+    public void equiperArme(Objet arme){
         String equip;
-
         if (getArme() == null){
             setArme(arme);
         }else {
@@ -228,7 +219,7 @@ public class Player extends Combattant{
         System.out.println("Votre attaque passe à "+ getArme().getAtt());
     }
 
-    public void equiperEquipement(Equipement equipement){
+    public void equiperEquipement(Objet equipement){
         int indice = 0;
         switch (equipement.getEquip()){
             case "casque":
@@ -245,7 +236,7 @@ public class Player extends Combattant{
         if (this.equipement[indice] == null){
             this.equipement[indice] = equipement;
             nbLoot--;
-            tresors[nbLoot] = null;
+            inventaire[nbLoot] = null;
         }else {
             System.out.println("Vous portez déjà "+this.equipement[indice]+" ( def : "+this.equipement[indice].getDefense()+" )");
             System.out.println("Voulez vous toujours l'équiper ? [o/n]");
@@ -259,8 +250,8 @@ public class Player extends Combattant{
             // on enleve le nouvel equipement de l'inventaire et on met l'ancien à la place, on équipe le nouvel equipement
             if (reponse.equals("o")){
                 nbLoot --;
-                Equipement temp = tresors[nbLoot];
-                tresors[nbLoot] = this.equipement[indice];
+                Objet temp = inventaire[nbLoot];
+                inventaire[nbLoot] = this.equipement[indice];
                 nbLoot ++;
                 this.equipement[indice] = temp;
             }
@@ -276,23 +267,18 @@ public class Player extends Combattant{
     }
 
     public void afficherInventaire(){
-        for (int i=0; i<nbLoot; i++){
-            System.out.print("["+tresors[i]+"]");
-            if (i%3 == 0){
-                System.out.println();
-            }
-        }
-    }
-
-    public void afficherEquipements(){
+        System.out.println("Arme : "+getArme());
+        System.out.print("\nEquipement : ");
         for (int i=0; i<3; i++){
             System.out.print("["+equipement[i]+"] ");
-        }System.out.println("["+getArme()+"]");
-    }
-
-    public void afficherPotions(){
-        for (int i=0; i<nbPotions; i++){
-            System.out.print("["+stockPotions[i]+"] ");
+        }
+        System.out.print("\n\nInventaire : ");
+        for (int i=0; i<15; i++){
+            if (i%5 == 0 && i!=0){
+                System.out.print("\n             ");
+            }
+            System.out.print("["+inventaire[i]+"]");
+            
         }System.out.println();
     }
 
@@ -310,8 +296,14 @@ public class Player extends Combattant{
     }
 
     public void gagnerXP(int exp){
+        int lvlUp = niveau*100 ;
         this.exp += exp;
         System.out.println("Vous gagner "+exp+" de points d'experience !");
+        if (this.exp >= lvlUp){
+            levelUp();
+            this.exp -= lvlUp;
+        }
+
     }
 
     public void levelUp(){

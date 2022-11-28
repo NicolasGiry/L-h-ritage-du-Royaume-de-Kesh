@@ -1,0 +1,17 @@
+calcul de l'attaque du joueur : ( attaque de l'arme + random entre 2 et 5 ) * niveau/2
+calcul de l'attaque du monstre : ( niveau/2 ) * random entre 1 et 5
+
+Attaques joueur :
+	pointe : fait une attaque normale
+	
+	lancé d'arme : 	1 chance sur 5 de raté ( 0 degat )
+			1 chance sur 5 de taper 2 fois plus fort
+			3 chance sur 5 de taper normalement
+	
+	soin : retire 5 mana et ajoute 25 pv
+	
+Attaques Monstre : 
+	morsure : 	1 chance sur 5 d'empoisonner le joueur
+			attaque normalement
+	griffe : 1 chance sur 5 de taper 2 fois plus fort
+

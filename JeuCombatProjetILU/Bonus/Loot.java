@@ -1,7 +1,7 @@
 package Bonus;
 
-import Equipements.Equipement;
-import Equipements.Arme;
+import Objet.Equipement;
+import Objet.Arme;
 
 import java.util.Scanner;
 
@@ -35,11 +35,7 @@ public class Loot{
         joueur.gagnerPieces(pieces);
         if (equipement != null){
             System.out.println("Il y a un.e "+equipement+ " a l'interieur !");
-            joueur.recevoirEquipement(equipement);
-        }
-        if (arme != null){
-            System.out.println("Il y a un.e "+arme+ " a l'interieur !");
-            joueur.recevoirArme(arme);
+            joueur.recevoirObjet(equipement);
         }
     }
 }

@@ -1,8 +1,8 @@
-package Equipements;
+package Objet;
 
 import Aptitudes.Type;
 
-public enum Equipement{
+public enum Equipement implements Objet{
     CAPUCHE_DE_BRIGANT("capuche de brigant", "casque", Type.NORMAL, 2, 5), 
     CRANE_DOURS("crane d'ours", "casque", Type.NORMAL, 4, 7), 
     CASQUE_DE_SOLDAT("casque de soldat", "casque", Type.NORMAL, 8, 10), 
@@ -48,5 +48,13 @@ public enum Equipement{
     
     public int getPrix(){
         return prix;
+    }
+
+    public int getAtt(){
+        return 0;
+    }
+
+    public Type getType(){
+        return type;
     }
 }

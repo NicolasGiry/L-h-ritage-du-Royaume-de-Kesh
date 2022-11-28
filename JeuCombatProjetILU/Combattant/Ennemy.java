@@ -1,7 +1,7 @@
 package Combattant;
 
-import Equipements.Arme;
-import Equipements.Equipement;
+import Objet.Arme;
+import Objet.Equipement;
 import Bonus.Loot;
 import Aptitudes.Type;
 import Aptitudes.Attaques;

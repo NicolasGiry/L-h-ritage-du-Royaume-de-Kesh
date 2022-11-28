@@ -1,8 +1,8 @@
-package Equipements;
+package Objet;
 
 import Aptitudes.Type;
 
-public enum Arme{
+public enum Arme implements Objet{
     EPEE_EN_BOIS("épée en bois", 5, Type.NORMAL, 5), 
     EPEE_EN_FER("épée en fer", 10, Type.NORMAL, 10), 
     HACHE("hache", 10, Type.LOURD, 15), 
@@ -41,5 +41,13 @@ public enum Arme{
 
     public int getPrix(){
         return prix;
+    }
+
+    public String getEquip(){
+        return "arme";
+    }
+
+    public int getDefense(){
+        return 0;
     }
 }

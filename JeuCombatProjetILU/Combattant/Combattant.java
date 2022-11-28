@@ -1,6 +1,7 @@
 package Combattant;
 
-import Equipements.Arme;
+import Objet.Arme;
+import Objet.Objet;
 
 import java.util.Scanner;
 
@@ -11,16 +12,16 @@ public class Combattant {
     protected int maxHealth;
     private int currentHealth;
     protected int defense;
-    private Arme arme;
+    private Objet arme;
     private Attaques[] attaques;
     private int nbAttaques;
     protected boolean isPoisonned;
     private int nbToursPoison = 0;
     private boolean isStunt;
     private int nbToursStunt = 0;
-    protected int niveau;
+    protected int niveau = 1;
 
-    public Combattant(int defense, Arme arme, int nbAttaques, Attaques[] attaques, int niveau, int maxHealth) {
+    public Combattant(int defense, Objet arme, int nbAttaques, Attaques[] attaques, int niveau, int maxHealth) {
         this.defense = defense;
         this.arme = arme;
         this.nbAttaques = nbAttaques;
@@ -34,7 +35,7 @@ public class Combattant {
         return nom;
     }
 
-    public Arme getArme(){
+    public Objet getArme(){
         return arme;
     }
 
@@ -49,14 +50,6 @@ public class Combattant {
     public int getHealth(){
         return currentHealth;
     }
-
-    // public int getDefense(){
-    //     return defense;
-    // }
-
-    // public int getNiveau(){
-    //     return niveau;
-    // }
 
     public boolean getIsPoisonned(){
         return isPoisonned;
@@ -81,7 +74,7 @@ public class Combattant {
         }
     }
 
-    public void setArme(Arme arme){
+    public void setArme(Objet arme){
         this.arme = arme;
         System.out.println("Vous équipez "+arme);
     }
