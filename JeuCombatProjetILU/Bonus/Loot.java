@@ -1,7 +1,6 @@
 package Bonus;
 
-import Objet.Equipement;
-import Objet.Arme;
+import Objet.Objet;
 
 import java.util.Scanner;
 
@@ -10,32 +9,26 @@ import Combattant.Player;
 public class Loot{
     private int pieces;
     private int exp;
-    private Equipement equipement;
-    private Arme arme;
+    private Objet objet;
 
-    public Loot(int pieces, Equipement equipement, int exp){
+    public Loot(int pieces, Objet objet, int exp){
         this.pieces = pieces;
-        this.equipement = equipement;
-        this.arme = null;
+        this.objet = objet;
         this.exp = exp;
     }
 
-    public Loot(int pieces, Arme arme, int exp){
-        this.pieces = pieces;
-        this.arme = arme;
-        this.equipement = null;
-        this.exp = exp;
+    public int getXp(){
+        return exp;
     }
 
     public void ouvrirCoffre(Player joueur){
         Scanner input = new Scanner(System.in);
-        String trash;
         System.out.println("Vous trouvez un coffre ! vous l'ouvrez.");
-        trash = input.nextLine();
+        input.nextLine();
         joueur.gagnerPieces(pieces);
-        if (equipement != null){
-            System.out.println("Il y a un.e "+equipement+ " a l'interieur !");
-            joueur.recevoirObjet(equipement);
+        if (objet != null){
+            System.out.println("Il y a un.e "+objet+ " a l'interieur !");
+            joueur.recevoirObjet(objet);
         }
     }
 }

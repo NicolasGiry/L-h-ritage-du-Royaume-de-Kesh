@@ -26,7 +26,6 @@ public enum Attaques {
     private Type type;
     private Random random = new Random();
     private Scanner input = new Scanner(System.in);
-    private String trash;
 
     private Attaques(String nom, String description, Type type){
         this.nom = nom;
@@ -58,7 +57,7 @@ public enum Attaques {
                         ennemy.setNbToursPoison(5);
                         ennemy.BePoisonned(0);
                         System.out.println("l'épée a empoisonné "+ennemy.getNom()+" !");
-                        trash = input.nextLine();
+                        input.nextLine();
                     }
                 }
                 break;
@@ -89,7 +88,7 @@ public enum Attaques {
         System.out.println("Vous gagnez 25 PV !");
         System.out.println("Vous avez "+joueur.getHealth()+" PV");
         System.out.println("Il vous reste "+joueur.mana+" mana");
-        trash = input.nextLine();
+        input.nextLine();
         return 0;
     }
 
@@ -99,7 +98,7 @@ public enum Attaques {
             joueur.setNbToursPoison(5);
             joueur.BePoisonned(0);
             System.out.println("Cette attaque vous a empoisonné !");
-            trash = input.nextLine();
+            input.nextLine();
         }
         return att;
     }

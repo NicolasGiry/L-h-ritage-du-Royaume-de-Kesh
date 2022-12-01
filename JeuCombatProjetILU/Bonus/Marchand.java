@@ -22,7 +22,7 @@ public class Marchand{
         Scanner input = new Scanner(System.in);
         int choix;
         int argent = joueur.getPieces();
-        System.out.println("Bonjour voyageur ! n'hésitez pas à regarder !");
+        System.out.println("Vous rencontrer le chemin d'un marchand ! \nBonjour voyageur ! n'hésitez pas à regarder !");
         afficherMarchandise();
         System.out.println("Que voulez-vous acheter ? [1/2/3] ( 0 pour partir )");
         System.out.println("Votre argent : "+joueur.getPieces()+" ₽");
@@ -55,8 +55,9 @@ public class Marchand{
     }
 
     private void equiperAchat(Player joueur, int argent, Objet objet){
-        int prix = equipement.getPrix();
+        int prix = objet.getPrix();
         if (verifierArgent(prix, argent)){
+            joueur.perdrePieces(prix);
             joueur.recevoirObjet(objet);
         }else{
             System.out.println("Vous n'avez pas assez de pieces");

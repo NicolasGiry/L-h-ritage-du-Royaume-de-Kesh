@@ -14,10 +14,9 @@ public class Ennemy extends Combattant{
     private Type type;
     private Scanner input = new Scanner(System.in);
     private Random random = new Random();
-    private String trash;
 
-    public Ennemy(int defense, Arme arme, Loot loot, String nom, int niveau){
-        super(defense, arme, 2, attaquesEnnemy, niveau, 30 + (niveau*2)%70);
+    public Ennemy(int defense, Loot loot, String nom, int niveau){
+        super(defense, 2, attaquesEnnemy, niveau, 30 + (niveau*2)%70);
         this.tresor = loot;
         super.SetNom(nom);
     }
@@ -29,13 +28,13 @@ public class Ennemy extends Combattant{
     public int AttaqueMonstre(Player joueur){
         
         int choixAttaque = random.nextInt(2);
-        int att = ((niveau/2)+1) * (random.nextInt(5)+1);
+        int att = super.calculerAtt();
         if (joueur.isPoisonned){
             joueur.BePoisonned(att/3);
         }
         Attaques attaque = super.getAttaques()[choixAttaque];
         System.out.println(super.getNom()+" lance l'attaque "+attaque+" !");
-        trash = input.nextLine();
+        input.nextLine();
 
         switch (attaque){
             case MORSURE:
@@ -50,7 +49,7 @@ public class Ennemy extends Combattant{
             att = 0;
         }
         System.out.println(getNom()+" fait une attaque de "+att+" dégats !");
-        trash = input.nextLine();
+        input.nextLine();
         return att;
     }
 }

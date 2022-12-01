@@ -3,16 +3,17 @@ package Combattant;
 import Objet.Arme;
 import Objet.Objet;
 
+import java.util.Random;
 import java.util.Scanner;
 
 import Aptitudes.Attaques;
 
 public class Combattant {
+    private Random random = new Random();
     private String nom;
     protected int maxHealth;
     private int currentHealth;
     protected int defense;
-    private Objet arme;
     private Attaques[] attaques;
     private int nbAttaques;
     protected boolean isPoisonned;
@@ -21,9 +22,8 @@ public class Combattant {
     private int nbToursStunt = 0;
     protected int niveau = 1;
 
-    public Combattant(int defense, Objet arme, int nbAttaques, Attaques[] attaques, int niveau, int maxHealth) {
+    public Combattant(int defense, int nbAttaques, Attaques[] attaques, int niveau, int maxHealth) {
         this.defense = defense;
-        this.arme = arme;
         this.nbAttaques = nbAttaques;
         this.attaques = attaques;
         this.niveau = niveau;
@@ -33,10 +33,6 @@ public class Combattant {
 
     public String getNom(){
         return nom;
-    }
-
-    public Objet getArme(){
-        return arme;
     }
 
     public Attaques[] getAttaques(){
@@ -63,10 +59,6 @@ public class Combattant {
         this.nom = nom;
     }
 
-    // public void setDefense(int defense){
-    //     this.defense = defense;
-    // }
-
     public void SetHealth(int health){
         this.currentHealth = health;
         if (currentHealth>maxHealth){
@@ -74,21 +66,22 @@ public class Combattant {
         }
     }
 
-    public void setArme(Objet arme){
-        this.arme = arme;
-        System.out.println("Vous équipez "+arme);
+    public int calculerAtt(){
+        return 2+niveau*3+ random.nextInt(100)%((niveau*5)/2);
+    }
+    public int calculerAtt(Objet arme){
+        return 2+niveau*3+ random.nextInt(1000)%((niveau*5)/2)+arme.getAtt();
     }
 
     public void TakeDamage(int damage){
         Scanner input = new Scanner(System.in);
-        String trash;
         this.currentHealth -= damage;
         if (getHealth()>0){
             System.out.println("Il reste "+getHealth()+" pv à "+getNom());
         } else{
             System.out.println(getNom()+" a été tué par le coup !");
         }
-        trash = input.nextLine();
+        input.nextLine();
     }
 
     public void BePoisonned(int degat){

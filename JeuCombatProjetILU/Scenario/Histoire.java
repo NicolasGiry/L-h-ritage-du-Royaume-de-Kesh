@@ -25,39 +25,42 @@ public class Histoire {
     }
 
     public static void Loot(Player joueur, Ennemy monstre){
+        joueur.gagnerXP(monstre.getTresor().getXp());
         monstre.getTresor().ouvrirCoffre(joueur);
     }
 
     public static void combat(Player joueur, Ennemy monstre){
-        String trash;
         Scanner input = new Scanner(System.in);
-
-        System.out.println("Vous croisez le chemin de "+monstre.getNom()+" !");
-        trash = input.nextLine();
-        while (joueur.getHealth()>0 && monstre.getHealth()>0 && joueur.ChoixCombat()){
-            if (!joueur.getFuiteRatee()){
-                Attaques attaque = joueur.choisirAttaque();
-                monstre.TakeDamage(joueur.AttaqueJoueur(attaque, monstre));
+        if (joueur.getHealth()>0) {
+            System.out.println("Vous croisez le chemin de "+monstre.getNom()+" !");
+            input.nextLine();
+            while (joueur.getHealth()>0 && monstre.getHealth()>0 && joueur.ChoixCombat()){
+                if (!joueur.getFuiteRatee()){
+                    Attaques attaque = joueur.choisirAttaque();
+                    monstre.TakeDamage(joueur.AttaqueJoueur(attaque, monstre));
+                }
+                if (monstre.getHealth()>0){
+                    joueur.TakeDamage(monstre.AttaqueMonstre(joueur));
+                }
+            } if (joueur.getHealth() <= 0){
+                GameOver();
+            }else if (monstre.getHealth() <=0){
+                Loot(joueur, monstre);
             }
-            if (monstre.getHealth()>0){
-                joueur.TakeDamage(monstre.AttaqueMonstre(joueur));
-            }
-        } if (joueur.getHealth() <= 0){
-            GameOver();
-        }else if (monstre.getHealth() <=0){
-            Loot(joueur, monstre);
         }
     }
 
     public static void main(String[] args) {
         Player joueur = intro();
-        Loot coffre1 = new Loot(5, Equipement.BOUCLIER_EN_BOIS, 15);
+        Loot coffre1 = new Loot(5, Arme.SABRE, 99);
         Loot coffre2 = new Loot(5, Equipement.BOUCLIER_EN_METAL, 17);
         Loot coffre3 = new Loot(15, Equipement.CRANE_DOURS, 36);
-        Loot coffre = new Loot(25, Arme.HACHE, 0);
-        Ennemy monstre1 = new Ennemy(1, null, coffre1, "Armeus", 1);
-        Ennemy monstre2 = new Ennemy(1, null, coffre2, "Tyron", 1);
-        Ennemy monstre3 = new Ennemy(1, null, coffre3, "Anours", 5);
+        Loot coffre4 = new Loot(25, Arme.BAGUETTE_MAGIQUE, 84);
+        Ennemy monstre1 = new Ennemy(1, coffre1, "Armeus", 1);
+        Ennemy monstre2 = new Ennemy(1, coffre2, "Tyron", 1);
+        Ennemy monstre3 = new Ennemy(1, coffre3, "Anours", 2);
+        Ennemy monstre4 = new Ennemy(5, coffre4, "Nanaconda", 2);
+        Ennemy monstre5 = new Ennemy(1, coffre1, "Armeus", 2);
         Marchand marchand = new Marchand(Equipement.PLASTRON_DE_SOLDAT, Arme.EPEE_EMPOISONNEE, Potions.VIE);
 
         combat(joueur, monstre1);
@@ -66,6 +69,8 @@ public class Histoire {
         marchand.rencontrerMarchand(joueur);
 
         combat(joueur, monstre3);
+        combat(joueur, monstre4);
+        combat(joueur, monstre5);
         
         
     }
