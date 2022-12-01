@@ -1,5 +1,4 @@
-calcul de l'attaque du joueur : ( attaque de l'arme + random entre 2 et 5 ) * niveau/2
-calcul de l'attaque du monstre : ( niveau/2 ) * random entre 1 et 5
+calcul de l'attaque : 2+niveau*3+random(0,1000)mod((niveau*5)/2)+arme
 
 Attaques joueur :
 	pointe : fait une attaque normale
