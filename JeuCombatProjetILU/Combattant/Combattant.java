@@ -1,6 +1,5 @@
 package Combattant;
 
-import Objet.Arme;
 import Objet.Objet;
 
 import java.util.Random;

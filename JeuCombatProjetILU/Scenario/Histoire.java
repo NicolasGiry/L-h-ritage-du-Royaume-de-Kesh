@@ -52,9 +52,9 @@ public class Histoire {
 
     public static void main(String[] args) {
         Player joueur = intro();
-        Loot coffre1 = new Loot(5, Arme.SABRE, 99);
+        Loot coffre1 = new Loot(500, Arme.SABRE, 99);
         Loot coffre2 = new Loot(5, Equipement.BOUCLIER_EN_METAL, 17);
-        Loot coffre3 = new Loot(15, Equipement.CRANE_DOURS, 36);
+        Loot coffre3 = new Loot(15, Equipement.BOUCLIER_DE_CHEVALIER, 36);
         Loot coffre4 = new Loot(25, Arme.BAGUETTE_MAGIQUE, 84);
         Ennemy monstre1 = new Ennemy(1, coffre1, "Armeus", 1);
         Ennemy monstre2 = new Ennemy(1, coffre2, "Tyron", 1);

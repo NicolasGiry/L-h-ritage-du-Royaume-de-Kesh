@@ -1,9 +1,6 @@
 package Combattant;
 
-import Objet.Arme;
-import Objet.Equipement;
 import Bonus.Loot;
-import Aptitudes.Type;
 import Aptitudes.Attaques;
 import java.util.Random;
 import java.util.Scanner;
@@ -11,7 +8,6 @@ import java.util.Scanner;
 public class Ennemy extends Combattant{
     private static Attaques[] attaquesEnnemy = {Attaques.GRIFFE, Attaques.MORSURE};
     private Loot tresor;
-    private Type type;
     private Scanner input = new Scanner(System.in);
     private Random random = new Random();
 
@@ -42,6 +38,8 @@ public class Ennemy extends Combattant{
                 break;
             case GRIFFE:
                 att = attaque.griffe(att);
+                break;
+            default:
                 break;
         }
         att -= joueur.defense/5;

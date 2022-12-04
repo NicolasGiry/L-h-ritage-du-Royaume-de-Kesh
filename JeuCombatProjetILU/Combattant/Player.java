@@ -7,6 +7,7 @@ import Aptitudes.Attaques;
 import Objet.Arme;
 import Objet.Equipement;
 import Objet.Objet;
+import Objet.Potions;
 
 public class Player extends Combattant{
     private static Attaques[] attaquesJoueur= {Attaques.POINTE, Attaques.LANCE_DARME, Attaques.SOIN};
@@ -42,6 +43,8 @@ public class Player extends Combattant{
     }
 
     public void setArme(Objet arme){
+    	inventaire[nbLoot] = this.arme;
+    	nbLoot ++;
         this.arme = arme;
         System.out.println("Vous équipez "+arme);
     }
@@ -67,11 +70,11 @@ public class Player extends Combattant{
         int choix;
 
         System.out.println("Que voulez vous faire ?");
-        System.out.println("1) COMBAT  2) INFOS  3) FUIR");
+        System.out.println("1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR");
         choix = input.nextInt();
-        while (choix<1 || choix>3){
+        while (choix<1 || choix>4){
             System.out.println("Erreur, que voulez vous faire ?");
-            System.out.println("1) COMBAT  2) INFOS  3) FUIR");
+            System.out.println("1) COMBAT  2) INFOS  3) INVENTAIRE 4) FUIR");
             choix = input.nextInt();
         }
         switch (choix){
@@ -82,11 +85,97 @@ public class Player extends Combattant{
                 ChoixCombat();
                 return true;
             case 3:
+                afficherInventaire();
+                int i = 1;
+                String[] choixString = new String[3];
+                // afficher les options possibles par rapport a l'inventaire
+                if (objetInInventaire("arme")){
+                    System.out.print(i+") Changer d'arme ");
+                    choixString[i-1] = "a";
+                    i++;
+                }if (objetInInventaire("equipement")){
+                    System.out.print(i+") Changer d'equipement ");
+                    choixString[i-1] = "e";
+                    i++;
+                }if (objetInInventaire("potion")){
+                    System.out.println(i+") Boire potion");
+                    choixString[i-1] = "p";
+                }
+                System.out.println();
+                if (i>1) {
+                	System.out.println("Que voulez vous faire ? [0] pour annuler");
+	                int c = input.nextInt();
+	                while (c<0 || c>i){
+	                    System.out.println("Erreur, que voulez vous faire ? [0] pour annuler");
+	                    c = input.nextInt();
+	                }
+	                if (c!=0 && choixString[c-1].equals("a")){
+	                    changerArme();
+	                }if (c!=0 && choixString[c-1].equals("e")){
+	                    changerEquipement();
+	                }if (c!=0 && choixString[c-1
+                    ].equals("p")){
+	                    boirePotion();
+	                }
+                }
+                ChoixCombat();
+                return true;
+            case 4:
                 fuiteRatee = !fuirCombat();
                 return fuiteRatee;
             default:
                 return true;
             }
+    }
+
+    private void boirePotion() {
+    }
+
+    private void changerEquipement() {
+    }
+
+    private void changerArme() {
+        int j=1;
+        int[] posArmes = new int[15];
+        for (int i=0; i<nbLoot; i++){
+            if (inventaire[i] instanceof Arme){
+                System.out.println(j+") "+inventaire[i]);
+                posArmes[j-1] = i;
+                j++;
+            }
+        }
+        System.out.println("Quelle arme voulez-vous équiper ?");
+        int c = input.nextInt();
+        while (c<1 || c>j){
+            System.out.println("Erreur, que voulez vous faire ?");
+            c = input.nextInt();
+        }
+        equiperArme(inventaire[posArmes[c-1]], posArmes[c-1]);
+
+    }
+
+    private boolean objetInInventaire(String objet) {
+        boolean arme=false, equipement=false, potion=false;
+
+        for (int i=0;i<nbLoot;i++){
+            if (inventaire[i] instanceof Arme){
+                arme = true;
+            }if (inventaire[i] instanceof Equipement){
+                equipement = true;
+            }if (inventaire[i] instanceof Potions){
+                potion = true;
+            }
+        }
+        switch (objet){
+            case "arme":
+                return arme;
+            case "equipement":
+                return equipement;
+            case "potion":
+                return potion;
+            default:
+                return false;
+        }
     }
 
     private void infosCombat(){
@@ -161,6 +250,8 @@ public class Player extends Combattant{
                 mana -= 10;
                 att *= random.nextInt(4)+1;
                 break;
+            default:
+                break;
         }
         att -= ennemy.defense/5;
         if (att<0){
@@ -185,15 +276,42 @@ public class Player extends Combattant{
         String equip;
         if (this.arme == null){
             setArme(arme);
+            nbLoot--;
+            inventaire[nbLoot] = null;
+            
         }else {
             System.out.println("Vous portez deja une arme : "+this.arme+" ( att : "+this.arme.getAtt()+" )");
-            System.out.println("Voulez-vous abondonner cette arme et equiper la nouvelle ? [o/n]");
+            System.out.println("Voulez-vous equiper la nouvelle arme ? [o/n]");
             equip = input.nextLine();
             while (!(equip.equals("o")) && !(equip.equals("n"))){
                 System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
                 equip = input.nextLine();
             }
             if (equip.equals("o")){
+                nbLoot--;
+                inventaire[nbLoot] = null;
+                setArme(arme);
+            }
+        }
+        System.out.println("Votre attaque passe à "+ this.arme.getAtt());
+    }
+
+    public void equiperArme(Objet arme, int indice){
+        String equip;
+        if (this.arme == null){
+            setArme(arme);
+            inventaire[indice] = null;
+            
+        }else {
+            System.out.println("Vous portez deja une arme : "+this.arme+" ( att : "+this.arme.getAtt()+" )");
+            System.out.println("Voulez-vous equiper la nouvelle arme ? [o/n]");
+            equip = input.nextLine();
+            while (!(equip.equals("o")) && !(equip.equals("n"))){
+                System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
+                equip = input.nextLine();
+            }
+            if (equip.equals("o")){
+                inventaire[indice] = null;
                 setArme(arme);
             }
         }
@@ -248,6 +366,7 @@ public class Player extends Combattant{
     }
 
     public void afficherInventaire(){
+        Scanner input = new Scanner(System.in);
         System.out.println("Arme : "+this.arme);
         System.out.print("\nEquipement : ");
         for (int i=0; i<3; i++){
@@ -261,6 +380,7 @@ public class Player extends Combattant{
             System.out.print("["+inventaire[i]+"]");
             
         }System.out.println();
+        input.nextLine();
     }
 
     public void gagnerPieces(int pieces){
