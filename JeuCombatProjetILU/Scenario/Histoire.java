@@ -71,7 +71,5 @@ public class Histoire {
         combat(joueur, monstre3);
         combat(joueur, monstre4);
         combat(joueur, monstre5);
-        
-        
     }
 }

@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.Random;
 
 import Aptitudes.Attaques;
+import Aptitudes.Type;
 import Objet.Arme;
 import Objet.Equipement;
 import Objet.Objet;
@@ -19,7 +20,6 @@ public class Player extends Combattant{
     private int pieces = 10;
     private int exp = 0;
     private boolean fuiteRatee;
-
     private Scanner input = new Scanner(System.in);
     private Random random = new Random();
     
@@ -43,14 +43,23 @@ public class Player extends Combattant{
     }
 
     public void setArme(Objet arme){
-    	inventaire[nbLoot] = this.arme;
-    	nbLoot ++;
-        this.arme = arme;
-        System.out.println("Vous équipez "+arme);
+        for (int i=0; i<=nbLoot; i++){
+            if (inventaire[i]==null){
+                System.out.println("Vous équipez "+arme);
+                inventaire[i]=this.arme;
+                this.arme = arme;
+                if (i==nbLoot){
+                    nbLoot++;
+                }
+                break;
+            }
+        }
     }
 
     public void ChoisirNom(){
-        System.out.println("Bonjour ! Je suis desolee, vous venez de vous reveiller mais le temps presse !");
+        System.out.println("*Une explosion vous reveille au loin*");
+        input.nextLine();
+        System.out.println("*Le receptionniste de l'aubrege dans laquelle vous avez passé la nuit arrive*");
         input.nextLine();
         System.out.println("Le Royaume de Kesh a ete pris d'assault par des monstres ! Le chateau est en ruine !");
         input.nextLine();
@@ -146,10 +155,11 @@ public class Player extends Combattant{
         }
         System.out.println("Quelle arme voulez-vous équiper ?");
         int c = input.nextInt();
-        while (c<1 || c>j){
+        while (c<1 || c>=j){
             System.out.println("Erreur, que voulez vous faire ?");
             c = input.nextInt();
         }
+        input.nextLine();
         equiperArme(inventaire[posArmes[c-1]], posArmes[c-1]);
 
     }
@@ -273,52 +283,60 @@ public class Player extends Combattant{
     }
 
     public void equiperArme(Objet arme){
-        String equip;
         if (this.arme == null){
             setArme(arme);
             nbLoot--;
             inventaire[nbLoot] = null;
-            
         }else {
-            System.out.println("Vous portez deja une arme : "+this.arme+" ( att : "+this.arme.getAtt()+" )");
-            System.out.println("Voulez-vous equiper la nouvelle arme ? [o/n]");
-            equip = input.nextLine();
-            while (!(equip.equals("o")) && !(equip.equals("n"))){
-                System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
-                equip = input.nextLine();
-            }
-            if (equip.equals("o")){
+            String reponse = confirmationEquipementObjet(this.arme);
+            if (reponse.equals("o")){
                 nbLoot--;
                 inventaire[nbLoot] = null;
                 setArme(arme);
+                System.out.println("Votre attaque passe à "+ this.arme.getAtt());
+            }
+            if(reponse.equals("i")){
+                obtenirInfos(arme);
+                equiperArme(arme);
             }
         }
-        System.out.println("Votre attaque passe à "+ this.arme.getAtt());
+        
+    }
+
+    private void obtenirInfos(Objet objet) {
+        int att = objet.getAtt();
+        int def = objet.getDefense();
+        Type type = objet.getType();
+        if (att>0){
+            System.out.println("attaque : "+att);
+        }
+        if (def>0){
+            System.out.println("defense : "+ def);
+        }
+        System.out.println("type : "+type);
+        input.nextLine();
     }
 
     public void equiperArme(Objet arme, int indice){
-        String equip;
         if (this.arme == null){
             setArme(arme);
             inventaire[indice] = null;
-            
         }else {
-            System.out.println("Vous portez deja une arme : "+this.arme+" ( att : "+this.arme.getAtt()+" )");
-            System.out.println("Voulez-vous equiper la nouvelle arme ? [o/n]");
-            equip = input.nextLine();
-            while (!(equip.equals("o")) && !(equip.equals("n"))){
-                System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
-                equip = input.nextLine();
-            }
-            if (equip.equals("o")){
+            String reponse = confirmationEquipementObjet(this.arme);
+            if (reponse.equals("o")){
                 inventaire[indice] = null;
                 setArme(arme);
+                System.out.println("Votre attaque passe à "+ this.arme.getAtt());
+            }
+            if(reponse.equals("i")){
+                obtenirInfos(arme);
+                equiperArme(arme);
             }
         }
-        System.out.println("Votre attaque passe à "+ this.arme.getAtt());
+        
     }
 
-    public void equiperEquipement(Objet equipement){
+    private int indiceEquipement(Objet equipement){
         int indice = 0;
         switch (equipement.getEquip()){
             case "casque":
@@ -331,21 +349,38 @@ public class Player extends Combattant{
                 indice = 2;
                 break;
             }
+        return indice;
+    }
 
+    public int calculerDefense(){
+        defense = 0;
+        for (int i=0; i<3; i++){
+            if (this.equipement[i] != null){
+               defense +=this.equipement[i].getDefense();
+            }
+        }
+        return defense;
+    }
+
+    public String confirmationEquipementObjet(Objet objetDejaEquipe ){
+        System.out.println("Vous portez déjà "+objetDejaEquipe+" ( def : "+objetDejaEquipe.getDefense()+"; att : "+objetDejaEquipe.getAtt()+" )");
+        System.out.println("Voulez vous toujours l'équiper ou obtenir des informations ? [o/n/i]");
+        String reponse = input.nextLine();
+        while (!(reponse.equals("o")) && !(reponse.equals("n")) && !(reponse.equals("i"))){
+            System.out.println("Erreur. Voulez vous l'équiper ? [o/n/i]");
+            reponse = input.nextLine();
+        }
+        return reponse;
+    }
+
+    public void equiperEquipement(Objet equipement){
+        int indice = indiceEquipement(equipement);
         if (this.equipement[indice] == null){
             this.equipement[indice] = equipement;
             nbLoot--;
             inventaire[nbLoot] = null;
         }else {
-            System.out.println("Vous portez déjà "+this.equipement[indice]+" ( def : "+this.equipement[indice].getDefense()+" )");
-            System.out.println("Voulez vous toujours l'équiper ? [o/n]");
-            String reponse = input.nextLine();
-
-            while (!(reponse.equals("o")) && !(reponse.equals("n"))){
-                System.out.println("Erreur. Voulez vous l'équiper ? [o/n]");
-                reponse = input.nextLine();
-            }
-
+            String reponse = confirmationEquipementObjet(this.equipement[indice]);
             // on enleve le nouvel equipement de l'inventaire et on met l'ancien à la place, on équipe le nouvel equipement
             if (reponse.equals("o")){
                 nbLoot --;
@@ -353,16 +388,16 @@ public class Player extends Combattant{
                 inventaire[nbLoot] = this.equipement[indice];
                 nbLoot ++;
                 this.equipement[indice] = temp;
+                defense = calculerDefense();
+                System.out.println("Vous équipez "+equipement.toString()+"\nVotre defense passe à "+defense);
+                input.nextLine();
+            }
+            if (reponse.equals("i")){
+                obtenirInfos(equipement);
+                equiperEquipement(equipement);
             }
         }
-        defense = 0;
-        for (int i=0; i<3; i++){
-            if (this.equipement[i] != null){
-               defense +=this.equipement[i].getDefense();
-            }
-        }
-        System.out.println("Vous équipez "+equipement.toString()+"\nVotre defense passe à "+defense);
-        input.nextLine();
+        
     }
 
     public void afficherInventaire(){
@@ -378,7 +413,6 @@ public class Player extends Combattant{
                 System.out.print("\n             ");
             }
             System.out.print("["+inventaire[i]+"]");
-            
         }System.out.println();
         input.nextLine();
     }
