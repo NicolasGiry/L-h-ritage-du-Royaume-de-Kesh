@@ -1,6 +1,7 @@
 package Objet;
 
 import Aptitudes.Type;
+import Combattant.Player;
 
 public interface Objet{
     public int getPrix();
@@ -8,4 +9,5 @@ public interface Objet{
     public Type getType();
     public String getEquip();
     public int getDefense();
+    public void applyEffect(Player joueur);
 }

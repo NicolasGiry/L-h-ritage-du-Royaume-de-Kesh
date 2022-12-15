@@ -1,6 +1,7 @@
 package Objet;
 
 import Aptitudes.Type;
+import Combattant.Player;
 
 public enum Arme implements Objet{
     EPEE_EN_BOIS("épée en bois", 5, Type.NORMAL, 5), 
@@ -49,5 +50,8 @@ public enum Arme implements Objet{
 
     public int getDefense(){
         return 0;
+    }
+
+    public void applyEffect(Player joueur){
     }
 }

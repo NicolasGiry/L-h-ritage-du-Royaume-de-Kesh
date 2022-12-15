@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import Combattant.Ennemy;
 import Combattant.Player;
-import Objet.Arme;
 import Objet.Objet;
 
 public enum Attaques {

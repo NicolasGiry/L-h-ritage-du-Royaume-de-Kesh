@@ -1,6 +1,7 @@
 package Objet;
 
 import Aptitudes.Type;
+import Combattant.Player;
 
 public enum Potions implements Objet{
     VIE("potion de vie", 30), 
@@ -41,5 +42,21 @@ public enum Potions implements Objet{
             return 50;
         }
         return 0;
+    }
+
+    public void applyEffect(Player joueur){
+        switch (this){
+            case VIE:
+                joueur.SetHealth(joueur.getHealth()+50);
+                System.out.println("Une energie fabuleuse vous rechauffe le corps");
+                System.out.println("vous gagnez 50 PV ! Vous avez "+ joueur.getHealth()+" PV");
+                break;
+            case FORCE:
+                break;
+            case DEFENSE:
+                break;
+            case MAGIE:
+                break;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package Objet;
 
 import Aptitudes.Type;
+import Combattant.Player;
 
 public enum Equipement implements Objet{
     CAPUCHE_DE_BRIGANT("capuche de brigant", "casque", Type.NORMAL, 2, 5), 
@@ -56,5 +57,9 @@ public enum Equipement implements Objet{
 
     public Type getType(){
         return type;
+    }
+
+    public void applyEffect(Player joueur){
+
     }
 }

@@ -52,7 +52,7 @@ public class Histoire {
 
     public static void main(String[] args) {
         Player joueur = intro();
-        Loot coffre1 = new Loot(500, Arme.SABRE, 99);
+        Loot coffre1 = new Loot(500, Equipement.CASQUE_DE_SOLDAT, 99);
         Loot coffre2 = new Loot(5, Equipement.BOUCLIER_EN_METAL, 17);
         Loot coffre3 = new Loot(15, Equipement.BOUCLIER_DE_CHEVALIER, 36);
         Loot coffre4 = new Loot(25, Arme.BAGUETTE_MAGIQUE, 84);
