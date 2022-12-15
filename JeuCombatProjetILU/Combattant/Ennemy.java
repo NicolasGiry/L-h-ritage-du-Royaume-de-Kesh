@@ -1,6 +1,7 @@
 package Combattant;
 
 import Bonus.Loot;
+import Scenario.Affichage;
 import Aptitudes.Attaques;
 import java.util.Random;
 import java.util.Scanner;
@@ -10,6 +11,7 @@ public class Ennemy extends Combattant{
     private Loot tresor;
     private Scanner input = new Scanner(System.in);
     private Random random = new Random();
+    private Affichage output = new Affichage();
 
     public Ennemy(int defense, Loot loot, String nom, int niveau){
         super(defense, 2, attaquesEnnemy, niveau, 30 + (niveau*2)%70);
@@ -29,7 +31,7 @@ public class Ennemy extends Combattant{
             joueur.BePoisonned(att/3);
         }
         Attaques attaque = super.getAttaques()[choixAttaque];
-        System.out.println(super.getNom()+" lance l'attaque "+attaque+" !");
+        output.raconterTexte(super.getNom()+" lance l'attaque "+attaque+" !");
         input.nextLine();
 
         switch (attaque){
@@ -46,7 +48,7 @@ public class Ennemy extends Combattant{
         if (att<0){
             att = 0;
         }
-        System.out.println(getNom()+" fait une attaque de "+att+" dégats !");
+        output.raconterTexte(getNom()+" fait une attaque de "+att+" dégats !");
         input.nextLine();
         return att;
     }

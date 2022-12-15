@@ -9,6 +9,7 @@ import Objet.Arme;
 import Objet.Equipement;
 import Objet.Objet;
 import Objet.Potions;
+import Scenario.Affichage;
 
 public class Player extends Combattant{
     private static Attaques[] attaquesJoueur= {Attaques.POINTE, Attaques.LANCE_DARME, Attaques.SOIN};
@@ -22,6 +23,7 @@ public class Player extends Combattant{
     private boolean fuiteRatee;
     private Scanner input = new Scanner(System.in);
     private Random random = new Random();
+    private Affichage output = new Affichage();
     
     public Player() {
         super(0, 3, attaquesJoueur, 1, 100);
@@ -45,7 +47,8 @@ public class Player extends Combattant{
     public void setArme(Objet arme){
         for (int i=0; i<=nbLoot; i++){
             if (inventaire[i]==null){
-                System.out.println("Vous équipez "+arme);
+                output.raconterTexte("Vous équipez "+arme);
+                input.nextLine();
                 inventaire[i]=this.arme;
                 this.arme = arme;
                 if (i==nbLoot){
@@ -57,34 +60,29 @@ public class Player extends Combattant{
     }
 
     public void ChoisirNom(){
-        System.out.println("*Une explosion vous reveille au loin*");
+        
+        output.didascalie("*Une explosion vous reveille au loin*");
         input.nextLine();
-        System.out.println("*Le receptionniste de l'aubrege dans laquelle vous avez passé la nuit arrive*");
+        output.didascalie("*Le receptionniste de l'aubrege dans laquelle vous avez passé la nuit arrive*");
         input.nextLine();
-        System.out.println("Le Royaume de Kesh a ete pris d'assault par des monstres ! Le chateau est en ruine !");
-        input.nextLine();
-        System.out.println("Et les monstres s'approchent de nous, il faut vous battre !");
-        input.nextLine();
-        System.out.println("Vous êtes le dernier soldat encore en vie tous les autres ont ete pris par surprise ! ");
-        input.nextLine();
-        System.out.println("Quel est votre nom ? ");
-        System.out.print("Entrez votre nom :"); String nom = input.nextLine();
-        System.out.println(nom + " ? Partez au combat avant qu'il ne soit trop tard !");
-        input.nextLine();
+        String[] histoire = {"Le Royaume de Kesh a ete pris d'assault par des monstres ! Le chateau est en ruine !",
+                                "Et les monstres s'approchent de nous, il faut vous battre !",
+                                "Vous êtes le dernier soldat encore en vie tous les autres ont ete pris par surprise ! "};
+        output.raconterTexte(histoire);
+        String nom = output.raconterInput(new String[] {"Quel est votre nom ? ", "Entrez votre nom : "});
+        output.raconterTexte(new String[] {nom+ " ? Partez au combat avant qu'il ne soit trop tard !"});
         super.SetNom(nom);
     }
 
     public boolean ChoixCombat(){
         Scanner input = new Scanner(System.in);
-        int choix;
-
-        System.out.println("Que voulez vous faire ?");
-        System.out.println("1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR");
-        choix = input.nextInt();
+        String choixS;
+        
+        choixS = output.raconterInput(new String[] {"Que voulez vous faire ?","1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR :\n"});
+        int choix = Integer.parseInt(choixS);
         while (choix<1 || choix>4){
-            System.out.println("Erreur, que voulez vous faire ?");
-            System.out.println("1) COMBAT  2) INFOS  3) INVENTAIRE 4) FUIR");
-            choix = input.nextInt();
+            choixS = output.raconterInput(new String[] {"Erreur ! Que voulez vous faire ?","1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR :\n"});
+            choix = Integer.parseInt(choixS);
         }
         switch (choix){
             case 1:
@@ -97,22 +95,23 @@ public class Player extends Combattant{
                 afficherInventaire();
                 int i = 1;
                 String[] choixString = new String[3];
+                String[] afficherString = new String[3];
                 // afficher les options possibles par rapport a l'inventaire
                 if (objetInInventaire("arme")){
-                    System.out.print(i+") Changer d'arme ");
+                    afficherString[i-1] = (i+") Changer d'arme ");
                     choixString[i-1] = "a";
                     i++;
                 }if (objetInInventaire("equipement")){
-                    System.out.print(i+") Changer d'equipement ");
+                    afficherString[i-1] = (i+") Changer d'equipement ");
                     choixString[i-1] = "e";
                     i++;
                 }if (objetInInventaire("potion")){
-                    System.out.println(i+") Boire potion");
+                    afficherString[i-1] = (i+") Boire potion");
                     choixString[i-1] = "p";
                     i++;
                 }
-                System.out.println();
                 if (i>1) {
+                    output.texteRetourALaLigne(afficherString);
                 	System.out.println("Que voulez vous faire ? [0] pour annuler");
 	                int c = input.nextInt();
 	                while (c<0 || c>i){
@@ -216,20 +215,22 @@ public class Player extends Combattant{
     }
 
     private void infosCombat(){
+        String[] infos = new String[getNbAttaques()];
         for (int i=0; i<getNbAttaques(); i++){
-            System.out.println(getAttaques()[i]+" : "+getAttaques()[i].getDescription());
+            infos[i] = (getAttaques()[i]+" : "+getAttaques()[i].getDescription());
         }
+        output.texteRetourALaLigne(infos);
         input.nextLine();
     }
 
     private boolean fuirCombat(){
         int fuite = random.nextInt(10);
         if (fuite==0){
-            System.out.println("Vous avez réussi à fuir");
+            output.raconterTexte("Vous avez réussi à fuir");
             input.nextLine();
         }else 
         {
-            System.out.println("Fuite ratée...");
+            output.raconterTexte("Fuite ratée...");
             input.nextLine();
         }
         return fuite==0;
@@ -239,10 +240,12 @@ public class Player extends Combattant{
         String choix = "1";
         Attaques[] attaques = super.getAttaques();
         int nbAttaques = super.getNbAttaques();
-        System.out.println("ATTAQUES :");
+        String[] choixAttS = new String[nbAttaques+1];
+        choixAttS[0] = "ATTAQUES :";
         for (int i=0; i<nbAttaques; i++){
-            System.out.println(i+1 + ") " + attaques[i]);
+            choixAttS[i+1] = i+1 + ") " + attaques[i];
         }
+        output.texteRetourALaLigne(choixAttS);
         System.out.println("\n Choisissez votre attaque ! ( entre 1 et " + nbAttaques + ")");
         choix = input.nextLine();
         int choixNum = Integer.parseInt(choix);
@@ -252,7 +255,7 @@ public class Player extends Combattant{
             choix = input.nextLine();
             choixNum = Integer.parseInt(choix);
         }
-        System.out.println("Attaques chosie :" + attaques[choixNum-1]);
+        output.raconterTexte(new String[] {"Attaques chosie :" + attaques[choixNum-1]});
         return attaques[choixNum-1];
     }
 
@@ -296,8 +299,7 @@ public class Player extends Combattant{
         if (att<0){
             att = 0;
         }
-        System.out.println("Vous faites une attaque de "+att+" dégats !");
-        input.nextLine();
+        output.raconterTexte(new String[] {"Vous faites une attaque de "+att+" dégats !"});
         return att;
     }
 
@@ -305,13 +307,15 @@ public class Player extends Combattant{
         int att = objet.getAtt();
         int def = objet.getDefense();
         Type type = objet.getType();
+        String[] infos = new String[3];
         if (att>0){
-            System.out.println("attaque : "+att);
+            infos[0] = "attaque : "+att;
         }
         if (def>0){
-            System.out.println("defense : "+ def);
+            infos[1] = ("defense : "+ def);
         }
-        System.out.println("type : "+type);
+        infos[2] =("type : "+type);
+        output.texteRetourALaLigne(infos);
         input.nextLine();
     }
 
@@ -337,7 +341,8 @@ public class Player extends Combattant{
             if (reponse.equals("o")){
                 inventaire[indice] = null;
                 setArme(arme);
-                System.out.println("Votre attaque passe à "+ this.arme.getAtt());
+                output.raconterTexte("Votre attaque passe à "+ this.arme.getAtt());
+                input.nextLine();
             }
             if(reponse.equals("i")){
                 obtenirInfos(arme);
@@ -376,8 +381,9 @@ public class Player extends Combattant{
     }
 
     public String confirmationEquipementObjet(Objet objetDejaEquipe ){
-        System.out.println("Vous portez déjà "+objetDejaEquipe+" ( def : "+objetDejaEquipe.getDefense()+"; att : "+objetDejaEquipe.getAtt()+" )");
-        System.out.println("Voulez vous toujours l'équiper ou obtenir des informations ? [o/n/i]");
+        output.texteRetourALaLigne(new String[] {"Vous portez déjà "+objetDejaEquipe+" ( def : "+objetDejaEquipe.getDefense()+"; att : "+objetDejaEquipe.getAtt()+" )",
+                                    "Voulez vous toujours l'équiper ou obtenir des informations ?"});
+        System.out.println("[o/n/i] : ");
         String reponse = input.nextLine();
         while (!(reponse.equals("o")) && !(reponse.equals("n")) && !(reponse.equals("i"))){
             System.out.println("Erreur. Voulez vous l'équiper ? [o/n/i]");
@@ -402,7 +408,7 @@ public class Player extends Combattant{
                 }
                 this.equipement[indiceEquipement] = temp;
                 defense = calculerDefense();
-                System.out.println("Vous équipez "+equipement.toString()+"\nVotre defense passe à "+defense);
+                output.texteRetourALaLigne(new String[] {"Vous équipez "+equipement.toString(),"Votre defense passe à "+defense});
                 input.nextLine();
             }
             if (reponse.equals("i")){
@@ -431,8 +437,7 @@ public class Player extends Combattant{
 
     public void gagnerPieces(int pieces){
         this.pieces += pieces;
-        System.out.println("Vous gagnez "+pieces+" pieces");
-        System.out.println("Vous avez "+this.pieces+" pieces");
+        output.texteRetourALaLigne(new String[] {"Vous gagnez "+pieces+" pieces", "Vous avez "+this.pieces+" pieces"});
         input.nextLine();
     }
 
@@ -445,7 +450,8 @@ public class Player extends Combattant{
     public void gagnerXP(int exp){
         int lvlUp = niveau*100 ;
         this.exp += exp;
-        System.out.println("Vous gagner "+exp+" de points d'experience !");
+        output.raconterTexte("Vous gagner "+exp+" de points d'experience !");
+        input.nextLine();
         if (this.exp >= lvlUp){
             levelUp();
             this.exp -= lvlUp;
@@ -454,10 +460,10 @@ public class Player extends Combattant{
 
     public void levelUp(){
         niveau ++;
-        System.out.println("Vous gagnez un niveau ! Vous etes au niveau "+niveau+" !");
-        System.out.println("Votre attaque augmente de " + ((niveau*3+2+(niveau*5)/2)-((niveau-1)*3+2+((niveau-1)*5)/2)));
+        output.texteRetourALaLigne(new String[] {"Vous gagnez un niveau ! Vous etes au niveau "+niveau+" !",
+                                                    "Votre attaque augmente de " + ((niveau*3+2+(niveau*5)/2)-((niveau-1)*3+2+((niveau-1)*5)/2)),
+                                                    "Vous recuperer tous vos points de vie !"});
         SetHealth(super.maxHealth);
-        System.out.println("Vous recuperer tous vos points de vie !");
         input.nextLine();
     }
 }

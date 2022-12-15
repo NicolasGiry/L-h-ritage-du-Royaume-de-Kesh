@@ -1,6 +1,7 @@
 package Combattant;
 
 import Objet.Objet;
+import Scenario.Affichage;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -20,6 +21,8 @@ public class Combattant {
     private boolean isStunt;
     private int nbToursStunt = 0;
     protected int niveau = 1;
+    private Affichage output = new Affichage();
+    private Scanner input = new Scanner(System.in);
 
     public Combattant(int defense, int nbAttaques, Attaques[] attaques, int niveau, int maxHealth) {
         this.defense = defense;
@@ -73,19 +76,21 @@ public class Combattant {
     }
 
     public void TakeDamage(int damage){
-        Scanner input = new Scanner(System.in);
+       
         this.currentHealth -= damage;
         if (getHealth()>0){
-            System.out.println("Il reste "+getHealth()+" pv à "+getNom());
+            output.raconterTexte("Il reste "+getHealth()+" pv à "+getNom());
         } else{
-            System.out.println(getNom()+" a été tué par le coup !");
+            output.raconterTexte(getNom()+" a été tué par le coup !");
         }
         input.nextLine();
     }
 
     public void BePoisonned(int degat){
         if (degat>0){
-            System.out.println("Le poison draine les pv de "+getNom()+"\n"+nbToursPoison+" tours restants avant que l'effet du poison ne se dissipe");
+            output.texteRetourALaLigne( new String[] {"Le poison draine les pv de "+getNom(),
+            nbToursPoison+" tours restants avant que l'effet du poison ne se dissipe"});
+            input.nextLine();
             TakeDamage(degat+1);
         }
         nbToursPoison --;

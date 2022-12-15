@@ -1,6 +1,7 @@
 package Bonus;
 
 import Objet.Objet;
+import Scenario.Affichage;
 
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ public class Loot{
     private int pieces;
     private int exp;
     private Objet objet;
+    private Affichage output = new Affichage();
 
     public Loot(int pieces, Objet objet, int exp){
         this.pieces = pieces;
@@ -23,11 +25,12 @@ public class Loot{
 
     public void ouvrirCoffre(Player joueur){
         Scanner input = new Scanner(System.in);
-        System.out.println("Vous trouvez un coffre ! vous l'ouvrez.");
+        output.raconterTexte("Vous trouvez un coffre ! vous l'ouvrez.");
         input.nextLine();
         joueur.gagnerPieces(pieces);
         if (objet != null){
-            System.out.println("Il y a un.e "+objet+ " a l'interieur !");
+            output.raconterTexte("Il y a un.e "+objet+ " a l'interieur !");
+            input.nextLine();
             joueur.recevoirObjet(objet);
         }
     }

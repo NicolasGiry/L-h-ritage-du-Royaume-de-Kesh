@@ -2,6 +2,7 @@ package Objet;
 
 import Aptitudes.Type;
 import Combattant.Player;
+import Scenario.Affichage;
 
 public enum Potions implements Objet{
     VIE("potion de vie", 30), 
@@ -11,6 +12,7 @@ public enum Potions implements Objet{
 
     private String nom;
     private int prix;
+    private Affichage output = new Affichage();
 
     private Potions(String nom, int prix){
         this.nom = nom;
@@ -48,8 +50,8 @@ public enum Potions implements Objet{
         switch (this){
             case VIE:
                 joueur.SetHealth(joueur.getHealth()+50);
-                System.out.println("Une energie fabuleuse vous rechauffe le corps");
-                System.out.println("vous gagnez 50 PV ! Vous avez "+ joueur.getHealth()+" PV");
+                output.texteRetourALaLigne(new String[] {"Une energie fabuleuse vous rechauffe le corps",
+                    "vous gagnez 50 PV ! Vous avez "+ joueur.getHealth()+" PV"});
                 break;
             case FORCE:
                 break;

@@ -6,6 +6,7 @@ import java.util.Scanner;
 import Combattant.Ennemy;
 import Combattant.Player;
 import Objet.Objet;
+import Scenario.Affichage;
 
 public enum Attaques {
     LANCE_DARME("lancé d'arme", "lance l'arme du joueur en direction de l'ennemie. Cette action a une possibilité d'échouer mais vous pouvez aussi viser dans le mille et doubler votre attaque", Type.NORMAL), 
@@ -25,6 +26,7 @@ public enum Attaques {
     private Type type;
     private Random random = new Random();
     private Scanner input = new Scanner(System.in);
+    private Affichage output = new Affichage();
 
     private Attaques(String nom, String description, Type type){
         this.nom = nom;
@@ -55,7 +57,7 @@ public enum Attaques {
                     if (poison == 0){
                         ennemy.setNbToursPoison(5);
                         ennemy.BePoisonned(0);
-                        System.out.println("l'épée a empoisonné "+ennemy.getNom()+" !");
+                        output.raconterTexte("l'épée a empoisonné "+ennemy.getNom()+" !");
                         input.nextLine();
                     }
                 }
@@ -72,10 +74,12 @@ public enum Attaques {
     public int lanceDarme(int att){
         int coeff = random.nextInt(5);
         if (coeff == 0){
-            System.out.println("Cible ratée...");
+            output.raconterTexte("Cible ratée...");
+            input.nextLine();
             att = 0;
         }else  if (coeff==1){
-            System.out.println("En plein dans le mille !");
+            output.raconterTexte("En plein dans le mille !");
+            input.nextLine();
             att *= 2;
         }
         return att;
@@ -84,9 +88,9 @@ public enum Attaques {
     public int soin(int att, Player joueur){
         joueur.mana -=5;
         joueur.SetHealth(joueur.getHealth()+25);
-        System.out.println("Vous gagnez 25 PV !");
-        System.out.println("Vous avez "+joueur.getHealth()+" PV");
-        System.out.println("Il vous reste "+joueur.mana+" mana");
+        output.texteRetourALaLigne(new String[] {"Vous gagnez 25 PV !",
+            "Vous avez "+joueur.getHealth()+" PV",
+            "Il vous reste "+joueur.mana+" mana"});
         input.nextLine();
         return 0;
     }
@@ -96,7 +100,7 @@ public enum Attaques {
         if (poison == 0){
             joueur.setNbToursPoison(5);
             joueur.BePoisonned(0);
-            System.out.println("Cette attaque vous a empoisonné !");
+            output.raconterTexte("Cette attaque vous a empoisonné !");
             input.nextLine();
         }
         return att;
@@ -106,7 +110,8 @@ public enum Attaques {
         int doubleAtt = random.nextInt(5);
         if (doubleAtt == 0){
             att *= 2;
-            System.out.println("Pris par la vitesse il attaque deux fois !");
+            output.raconterTexte("Pris par la vitesse il attaque deux fois !");
+            input.nextLine();
         }
         return att;
     }
