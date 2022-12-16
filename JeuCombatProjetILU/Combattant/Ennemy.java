@@ -31,7 +31,7 @@ public class Ennemy extends Combattant{
             joueur.BePoisonned(att/3);
         }
         Attaques attaque = super.getAttaques()[choixAttaque];
-        output.raconterTexte(super.getNom()+" lance l'attaque "+attaque+" !");
+        output.raconterTexte(super.getNom()+" lance l'attaque "+attaque+" !", joueur);
         input.nextLine();
 
         switch (attaque){
@@ -48,7 +48,7 @@ public class Ennemy extends Combattant{
         if (att<0){
             att = 0;
         }
-        output.raconterTexte(getNom()+" fait une attaque de "+att+" dégats !");
+        output.raconterTexte(getNom()+" fait une attaque de "+att+" dégats !", joueur);
         input.nextLine();
         return att;
     }

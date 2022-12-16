@@ -1,5 +1,7 @@
 package Objet;
 
+import java.util.Scanner;
+
 import Aptitudes.Type;
 import Combattant.Player;
 import Scenario.Affichage;
@@ -12,6 +14,7 @@ public enum Potions implements Objet{
 
     private String nom;
     private int prix;
+    private Scanner input = new Scanner(System.in);
     private Affichage output = new Affichage();
 
     private Potions(String nom, int prix){
@@ -52,6 +55,7 @@ public enum Potions implements Objet{
                 joueur.SetHealth(joueur.getHealth()+50);
                 output.texteRetourALaLigne(new String[] {"Une energie fabuleuse vous rechauffe le corps",
                     "vous gagnez 50 PV ! Vous avez "+ joueur.getHealth()+" PV"});
+                input.nextLine();
                 break;
             case FORCE:
                 break;

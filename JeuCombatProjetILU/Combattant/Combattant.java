@@ -76,12 +76,21 @@ public class Combattant {
     }
 
     public void TakeDamage(int damage){
-       
         this.currentHealth -= damage;
         if (getHealth()>0){
             output.raconterTexte("Il reste "+getHealth()+" pv à "+getNom());
         } else{
             output.raconterTexte(getNom()+" a été tué par le coup !");
+        }
+        input.nextLine();
+    }
+
+    public void TakeDamage(int damage, Player joueur){
+        this.currentHealth -= damage;
+        if (getHealth()>0){
+            output.raconterTexte("Il reste "+getHealth()+" pv à "+getNom(), joueur);
+        } else{
+            output.raconterTexte(getNom()+" a été tué par le coup !", joueur);
         }
         input.nextLine();
     }

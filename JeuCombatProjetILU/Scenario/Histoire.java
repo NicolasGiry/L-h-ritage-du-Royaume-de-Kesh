@@ -38,10 +38,10 @@ public class Histoire {
             while (joueur.getHealth()>0 && monstre.getHealth()>0 && joueur.ChoixCombat()){
                 if (!joueur.getFuiteRatee()){
                     Attaques attaque = joueur.choisirAttaque();
-                    monstre.TakeDamage(joueur.AttaqueJoueur(attaque, monstre));
+                    monstre.TakeDamage(joueur.AttaqueJoueur(attaque, monstre), joueur);
                 }
                 if (monstre.getHealth()>0){
-                    joueur.TakeDamage(monstre.AttaqueMonstre(joueur));
+                    joueur.TakeDamage(monstre.AttaqueMonstre(joueur), joueur);
                 }
             } if (joueur.getHealth() <= 0){
                 GameOver();

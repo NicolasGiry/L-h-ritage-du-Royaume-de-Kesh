@@ -32,8 +32,16 @@ public class Player extends Combattant{
         }
     }
 
+    public int getMaxHealth(){
+        return super.maxHealth;
+    }
+
     public int getPieces(){
         return pieces;
+    }
+
+    public int getXP(){
+        return exp;
     }
 
     public boolean getFuiteRatee(){
@@ -78,10 +86,10 @@ public class Player extends Combattant{
         Scanner input = new Scanner(System.in);
         String choixS;
         
-        choixS = output.raconterInput(new String[] {"Que voulez vous faire ?","1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR :\n"});
+        choixS = output.raconterInput(new String[] {"Que voulez vous faire ?","1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR :\n"}, this);
         int choix = Integer.parseInt(choixS);
         while (choix<1 || choix>4){
-            choixS = output.raconterInput(new String[] {"Erreur ! Que voulez vous faire ?","1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR :\n"});
+            choixS = output.raconterInput(new String[] {"Erreur ! Que voulez vous faire ?","1) COMBAT  2) INFOS 3) INVENTAIRE 4) FUIR :\n"}, this);
             choix = Integer.parseInt(choixS);
         }
         switch (choix){
@@ -219,18 +227,18 @@ public class Player extends Combattant{
         for (int i=0; i<getNbAttaques(); i++){
             infos[i] = (getAttaques()[i]+" : "+getAttaques()[i].getDescription());
         }
-        output.texteRetourALaLigne(infos);
+        output.texteRetourALaLigne(infos, this);
         input.nextLine();
     }
 
     private boolean fuirCombat(){
         int fuite = random.nextInt(10);
         if (fuite==0){
-            output.raconterTexte("Vous avez réussi à fuir");
+            output.raconterTexte("Vous avez réussi à fuir", this);
             input.nextLine();
         }else 
         {
-            output.raconterTexte("Fuite ratée...");
+            output.raconterTexte("Fuite ratée...", this);
             input.nextLine();
         }
         return fuite==0;
@@ -245,7 +253,7 @@ public class Player extends Combattant{
         for (int i=0; i<nbAttaques; i++){
             choixAttS[i+1] = i+1 + ") " + attaques[i];
         }
-        output.texteRetourALaLigne(choixAttS);
+        output.texteRetourALaLigne(choixAttS, this);
         System.out.println("\n Choisissez votre attaque ! ( entre 1 et " + nbAttaques + ")");
         choix = input.nextLine();
         int choixNum = Integer.parseInt(choix);
@@ -255,7 +263,8 @@ public class Player extends Combattant{
             choix = input.nextLine();
             choixNum = Integer.parseInt(choix);
         }
-        output.raconterTexte(new String[] {"Attaques chosie :" + attaques[choixNum-1]});
+        output.raconterTexte("Attaques chosie :" + attaques[choixNum-1], this);
+        input.nextLine();
         return attaques[choixNum-1];
     }
 
@@ -299,7 +308,8 @@ public class Player extends Combattant{
         if (att<0){
             att = 0;
         }
-        output.raconterTexte(new String[] {"Vous faites une attaque de "+att+" dégats !"});
+        output.raconterTexte("Vous faites une attaque de "+att+" dégats !", this);
+        input.nextLine();
         return att;
     }
 
@@ -315,7 +325,7 @@ public class Player extends Combattant{
             infos[1] = ("defense : "+ def);
         }
         infos[2] =("type : "+type);
-        output.texteRetourALaLigne(infos);
+        output.texteRetourALaLigne(infos, this);
         input.nextLine();
     }
 
@@ -465,5 +475,9 @@ public class Player extends Combattant{
                                                     "Vous recuperer tous vos points de vie !"});
         SetHealth(super.maxHealth);
         input.nextLine();
+    }
+
+    public int getNiveau() {
+        return niveau;
     }
 }
