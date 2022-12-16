@@ -12,6 +12,9 @@ import Objet.Potions;
 import Scenario.Affichage;
 
 public class Player extends Combattant{
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
     private static Attaques[] attaquesJoueur= {Attaques.POINTE, Attaques.LANCE_DARME, Attaques.SOIN};
     private Objet[] inventaire = new Objet[15];
     private Objet[] equipement = new Equipement[3];
@@ -50,6 +53,18 @@ public class Player extends Combattant{
             return true;
         }
         return fuiteRatee;
+    }
+
+    public Objet getArme(){
+        return arme;
+    }
+
+    public Objet[] getEquipement(){
+        return equipement;
+    }
+
+    public Objet[] getInventaire(){
+        return inventaire;
     }
 
     public void setArme(Objet arme){
@@ -100,7 +115,7 @@ public class Player extends Combattant{
                 ChoixCombat();
                 return true;
             case 3:
-                afficherInventaire();
+                output.afficherInventaire(this);
                 int i = 1;
                 String[] choixString = new String[3];
                 String[] afficherString = new String[3];
@@ -263,7 +278,7 @@ public class Player extends Combattant{
             choix = input.nextLine();
             choixNum = Integer.parseInt(choix);
         }
-        output.raconterTexte("Attaques chosie :" + attaques[choixNum-1], this);
+        output.raconterTexte("Attaques chosie : " + attaques[choixNum-1], this);
         input.nextLine();
         return attaques[choixNum-1];
     }
@@ -277,7 +292,6 @@ public class Player extends Combattant{
                 att = attaque.lanceDarme(att);
                 break;
             case POINTE:
-                att = 999;
                 break;
             case SOIN:
                 return attaque.soin(att, this);
@@ -428,22 +442,7 @@ public class Player extends Combattant{
         }
     }
 
-    public void afficherInventaire(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("Arme : "+this.arme);
-        System.out.print("\nEquipement : ");
-        for (int i=0; i<3; i++){
-            System.out.print("["+equipement[i]+"] ");
-        }
-        System.out.print("\n\nInventaire : ");
-        for (int i=0; i<15; i++){
-            if (i%5 == 0 && i!=0){
-                System.out.print("\n             ");
-            }
-            System.out.print("["+inventaire[i]+"]");
-        }System.out.println();
-        input.nextLine();
-    }
+    
 
     public void gagnerPieces(int pieces){
         this.pieces += pieces;

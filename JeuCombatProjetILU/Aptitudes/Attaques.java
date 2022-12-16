@@ -9,11 +9,11 @@ import Objet.Objet;
 import Scenario.Affichage;
 
 public enum Attaques {
-    LANCE_DARME("lancé d'arme", "lance l'arme du joueur en direction de l'ennemie. Cette action a une possibilité d'échouer mais vous pouvez aussi viser dans le mille et doubler votre attaque", Type.NORMAL), 
+    LANCE_DARME("lancé d'arme", "lance l'arme en direction de l'ennemi. 1 chance sur 5 d'echouer ou de faire double", Type.NORMAL), 
     POINTE("pointe", "attaque simple réussissant à coup sur", Type.NORMAL), 
     MORSURE("morsure", "le monstre plante ses crocs dans votre chair, vous avez une chance sur cinq d'être empoisonné", Type.POISON), 
     GRIFFE("griffe", "le monstre vous griffe avec ses ongles acérés, il peut enchainer deux griffes à la suite", Type.RAPIDE), 
-    LANCE_FLAMME("lance flamme", "le monstre crache un jet de flamme qui vous brûle intensémment, au fil des jets de flammes, les dégats augmentent", Type.MAGIQUE), 
+    LANCE_FLAMME("lance flamme", "le monstre crache un jet de flamme, au fil des flammes, les dégats augmentent", Type.MAGIQUE), 
     BOULE_DE_FEU("boule de feu", "vous lancez une boule de feu par magie, très efficace contre les monstres plantes", Type.MAGIQUE), 
     BOULE_DE_GLACE("boule de glace", "vous lancez une boule de glace par magie, très efficace contre les monstres feu", Type.MAGIQUE), 
     ECLAIR("éclair", "vous lancez un éclair par magie, très efficace contre les monstres glace", Type.MAGIQUE), 
@@ -90,7 +90,7 @@ public enum Attaques {
         joueur.SetHealth(joueur.getHealth()+25);
         output.texteRetourALaLigne(new String[] {"Vous gagnez 25 PV !",
             "Vous avez "+joueur.getHealth()+" PV",
-            "Il vous reste "+joueur.mana+" mana"});
+            "Il vous reste "+joueur.mana+" mana"}, joueur);
         input.nextLine();
         return 0;
     }

@@ -53,17 +53,19 @@ public class Histoire {
 
     public static void main(String[] args) {
         Histoire histoire = new Histoire();
-        Player joueur = histoire.intro();
-        Loot coffre1 = new Loot(500, Equipement.CASQUE_DE_SOLDAT, 99);
+        Loot coffre1 = new Loot(50, Equipement.CASQUE_DE_SOLDAT, 10);
         Loot coffre2 = new Loot(5, Equipement.BOUCLIER_EN_METAL, 17);
         Loot coffre3 = new Loot(15, Equipement.BOUCLIER_DE_CHEVALIER, 36);
         Loot coffre4 = new Loot(25, Arme.BAGUETTE_MAGIQUE, 84);
+        Loot coffre5 = new Loot(27, Potions.FORCE, 45);
         Ennemy monstre1 = new Ennemy(1, coffre1, "Armeus", 1);
         Ennemy monstre2 = new Ennemy(1, coffre2, "Tyron", 1);
         Ennemy monstre3 = new Ennemy(1, coffre3, "Anours", 2);
         Ennemy monstre4 = new Ennemy(5, coffre4, "Nanaconda", 2);
-        Ennemy monstre5 = new Ennemy(1, coffre1, "Armeus", 2);
+        Ennemy monstre5 = new Ennemy(5, coffre5, "Ulryz", 5);
         Marchand marchand = new Marchand(Equipement.PLASTRON_DE_SOLDAT, Arme.EPEE_EMPOISONNEE, Potions.VIE);
+
+        Player joueur = histoire.intro();
 
         histoire.combat(joueur, monstre1);
         histoire.combat(joueur, monstre2);

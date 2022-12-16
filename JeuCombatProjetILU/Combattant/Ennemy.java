@@ -19,6 +19,12 @@ public class Ennemy extends Combattant{
         super.SetNom(nom);
     }
 
+    // public Ennemy(int defense, Loot loot, String nom, int niveau, Attaques[] ){
+    //     super(defense, 2, attaquesEnnemy, niveau, 30 + (niveau*2)%70);
+    //     this.tresor = loot;
+    //     super.SetNom(nom);
+    // }
+
     public Loot getTresor(){
         return tresor;
     }
